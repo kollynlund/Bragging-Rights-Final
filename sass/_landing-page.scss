@@ -1,0 +1,204 @@
+.landing-page-container {
+	// background-image: url('../../img/felix.jpg') !important;
+	// background-size: cover;
+	// background-repeat: no-repeat;
+	// background-attachment: scroll;
+	// background-image: none !important;
+	// background-color: #999;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 710px;
+	@media (max-width: 450px) {
+		width: 85%;
+	}
+} 
+
+#felix {
+	background-image: url(../../img/felix.jpg);
+	width: 100%;
+	z-index: -1000;
+	   max-height: 350px;
+}
+
+.landing-page-header {
+	width: 100%;
+	font-family: 'Roboto Slab', sans-serif; 
+	background-color: #333;
+	background-image: url(../../img/background/bike2.jpg);
+	  background-size: cover;
+  background-position: 0% 75%;
+	border-bottom: 2px solid #eee;
+	margin-top: 0px;
+	height: 110px;
+
+
+}
+
+#logo-launch {
+	max-height: 120px;
+	margin: 0px auto 5px auto;
+	padding-top: 5px;
+	display: block;
+	margin-bottom: 40px;
+	// @media (max-width: 450px) {
+	// 	margin-left: 25%;
+	// }
+	// @media (max-width: 400px) {
+	// 	margin-left: 20%;
+	// }
+}
+
+#launchsite-top {
+	color: #222;
+	font-size: 1.25em;
+	text-transform: uppercase;
+	cursor: pointer;
+	position: relative;
+	top: -162px;
+	right: -2px;
+	background-color: #FFCB27;
+	float: right;
+	border: 2px solid #ddd;
+	padding: 5px 10px;
+	letter-spacing: 1.5px;
+	font-weight: 500;
+	vertical-align: middle;
+	&:hover {
+	}
+	@media (max-width: 450px) {
+		font-size: 1.25em;
+		padding: 2.5px 5px;
+	}
+
+}
+
+#launchsite-text {
+	font-family: 'Roboto Slab', sans-serif;
+	margin-top: 10px !important;
+	padding: 10px;
+	clear: both;
+	position: relative !important;
+	top: -30px !important;
+	font-size: 1.25em;
+	text-align: center;
+	background-color: #ddd;
+	color: #222;
+	box-shadow: 1px 1px 0px 0px #888, 2px 2px 0px 0px #888, 3px 3px 0px 0px #888, 4px 4px 0px 0px #888;
+	@media (max-width: 550px) {
+		font-size: 1.2em;
+		line-height: 18px;
+	}
+
+}
+
+#launchsite-text-secondary {
+	font-family: 'Roboto Slab', sans-serif;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+	font-size: 1.25em;
+	text-align: center;
+	background-color: #ddd;
+	color: #222;
+	box-shadow: 1px 1px 0px 0px #ddd, 2px 2px 0px 0px #ddd, 3px 3px 0px 0px #ddd, 4px 4px 0px 0px #ddd;
+	@media (max-width: 550px) {
+		font-size: 1.2em;
+		line-height: 18px;
+	}
+
+}
+
+.logo-launch-top {
+	margin: 10px !important;
+}
+
+.video-container {
+	width: 100%;
+	margin-right: auto;
+	position: relative !important;
+    top: -30px !important;
+    max-height: 400px;
+	margin-left: auto;
+	text-align: center;
+	background-color: #ccc;
+	box-shadow: 1px 1px 0px 0px #999, 2px 2px 0px 0px #999, 3px 3px 0px 0px #999, 4px 4px 0px 0px #999;
+
+
+}
+
+#launchsite {
+	padding: 15px;
+	height: inherit;
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 1.2em;
+	margin-top: -10px !important;
+	letter-spacing: 4px;
+	text-transform: uppercase;
+	box-shadow: 1px 1px 0px 0px #aaa, 2px 2px 0px 0px #aaa, 3px 3px 0px 0px #aaa, 4px 4px 0px 0px #aaa !important;
+	@media (max-width: 500px) {
+		padding: 10px;
+		letter-spacing: 3px;
+	}
+
+}
+
+#launchvideo {
+	padding: 15px;
+	background-color: #ccc !important;
+	height: inherit;
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 1.2em;
+	margin-top: -10px !important;
+	margin-bottom: 150px;
+	letter-spacing: 4px;
+	text-transform: uppercase !important;
+	box-shadow: 1px 1px 0px 0px #888, 2px 2px 0px 0px #888, 3px 3px 0px 0px #888, 4px 4px 0px 0px #888 !important;
+	@media (max-width: 500px) {
+		padding: 10px;
+		letter-spacing: 3px;
+	}
+	&:hover {
+		background-color: #bbb !important;
+	}
+
+}
+
+.nounderline:hover {
+	text-decoration: none;
+
+}
+
+
+.icon-container {
+   display: flex;
+   justify-content: space-between;
+   background-color: #111;
+   border-top: 2px solid #ddd;
+   position:fixed;
+   left:0px;
+   bottom:0px;
+   width:100%;
+}
+
+#icon-launch {
+	padding: 10px;
+	height: 80px;
+	width: 80px;
+	fill: #eee !important;
+	display: inline-block;
+	// box-shadow: 1px 1px 0px 0px #ddd, 2px 2px 0px 0px #ddd, 3px 3px 0px 0px #ddd, 4px 4px 0px 0px #ddd !important;
+	@media (max-width: 900px) {
+			height: 80px;
+	        width: 80px;
+
+	}
+
+
+	@media (max-width: 450px) {
+			height: 90px;
+	        width: 90px;
+
+	}
+}
+

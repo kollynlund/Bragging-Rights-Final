@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<!-- * * SOME STUFF THAT MAKES THE WEBSITE WORK REALLY GOOD * * -->
+<head>
+  <!-- * * SO THAT OTHER PROGRAMMERS WILL THINK WE'RE LEGIT * * -->
+  <meta charset="utf-8">    
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/bootstrap-modal-carousel.min.css"> 
+  <link href="sass/sass/styles.css" rel="stylesheet">
+   
+
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <link href="css/font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>  
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/d3.v3.min.js"></script>
+  <script src="js/topojson.js"></script>
+  <script src="js/queue.v1.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.6/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+
+  <title>Bragging Rights</title>   
+</head>
+
+<!-- * * THE STUFF THAT REALLY IS THE WEBSITE * * -->
+<body>            
+  <p class="welcome-top">The World's first interactive website to find, share and explore the best <span class="important-txt">ACTION SPORTS ACHIEVMENTS</span> from around the globe.</p>
+  <div class="row header">
+    <div class="col-sm-12">
+      <img class="logo img-responsive" alt="logo" src="img/logocrop.png">
+
+      <div class="btn-group map-list-btns nav-item" data-toggle="buttons">
+        <button type="button" id="btn-map" class="btn btn-toggle-active" name="options"><span class="glyphicon glyphicon-globe globe-icon-btn" aria-hidden="true"></span></button>
+        <button type="button" id="btn-list" class="btn" name="options"><span class="glyphicon glyphicon-list-alt list-icon-btn" aria-hidden="true"></span></button>
+      </div>
+
+      <div id="filter-map" class="dropdown">
+        <button type="button" id="sort-map-dropdown-button" class="btn dropdown-toggle sort-map-btn" data-toggle="dropdown" aria-expanded="false">
+            FILTER MAP <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu text-center" role="menu" id="sort-map-list">
+          <!-- REMOVED ITEMS HERE - map.js NOW ADDS THEM DYNAMICALLY -->
+        </ul>
+      </div>
+
+      <div class="form-inline search-box nav-item" role="search">
+        <div class="input-group search-box">
+          <input type="text" class="form-control search-input" id="search-input" placeholder="Search">
+
+          <span class="input-group-btn">
+            <button class="btn search-btn">GO</button>
+          </span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-add-event nav-item" data-toggle="modal" data-target=".add-worlds-first-modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ADD AN ACHIEVMENT</button>
+    </div>
+  </div>
+
+  <!-- * * MAIN CONTENT CONTAINER * * -->
+  <div class="container">
+    <!-- * * ADD EVENT MODAL * * -->
+    <div class="modal fade add-worlds-first-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" ng-app="test">
+        <div class="modal-content" ng-controller="testControl">
+          <div class="modal-header modal-header-add-event">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+            <h4 class="modal-title add-event-header-title" id="ModalLabel">Add an achievement</h4>
+          </div> <!-- Closes header -->
+
+          <div class="add-event-form" action="test code/file_upload_test.php" method="post" enctype="multipart/form-data">
+            <div class="form-group add-event-modal-main-form-group">
+            <div class="input-group-container">
+              <h4>Achievment Info</h4>
+              <div class="input-group input-add-event-group">
+                <div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+                <input type="text" class="form-control input-name" name="name-input" placeholder="Enter the full name of the person who achieved greatness" ng-model="selections.Name">
+              </div> <!-- Closes input-name -->               
+
+              <div class="input-group input-add-event-group">
+                <div class="input-group-addon"><i class="fa fa-star add-event-icon"></i></div>
+                <input type="text" class="form-control input-trick" placeholder="Enter a description of what they did" name="trick-input"ng-model="selections.Trick">
+              </div> <!-- Closes input-trick -->
+
+              <div class="input-group input-add-event-group">
+                <div class="input-group-addon"><i class="fa fa-calendar add-event-icon"></i></div>
+                <select class="form-control input-month" name="month-input">
+                  <option>Month <i class="fa fa-chevron-down"></i></option>
+                  <option class="month-option" days="31">- January</option>
+                  <option class="month-option" days="28">- February</option>
+                  <option class="month-option" days="31">- March</option>
+                  <option class="month-option" days="30">- April</option>
+                  <option class="month-option" days="31">- May</option>
+                  <option class="month-option" days="30">- June</option>
+                  <option class="month-option" days="31">- July</option>
+                  <option class="month-option" days="31">- August</option>
+                  <option class="month-option" days="30">- September</option>
+                  <option class="month-option" days="31">- October</option>
+                  <option class="month-option" days="30">- November</option>
+                  <option class="month-option" days="31">- December</option>
+                </select>  
+                <select class="form-control input-day" name="day-input"></select> 
+                <input class="form-control input-year" placeholder="Add 4 digit year" name="year-input"> 
+              </div> <!-- Closes input-date -->   
+
+              <div class="input-group input-add-event-group">
+                <div class="input-group-addon"><i class="fa fa-magic add-event-icon"></i></div>
+                <select class="form-control input-discipline" name="discipline-input" ng-options="discipline for discipline in disciplines" ng-model="selections.Discipline"></select>
+                <!-- <button ng-click="showSample()" prevent-default>Log Sample</button> -->
+              </div> <!-- Closes input-discipline --> 
+
+              <div class="form-group">
+                <div class="input-group-addon">Detials <i class="fa fa-info-circle add-event-icon"></i></div>
+                <textarea class="form-control input-details" id="input-details" placeholder="Additional details about the achievment" name="details-input" ng-model="selections['Additional Information']"></textarea>
+              </div> <!-- Closes input-details -->
+            </div> <!-- Closes basic trick info -->
+
+
+            <div class="input-group-container">
+              <h4 style="display:block">Location of achievement</h4>
+
+              <button class="btn btn-default btn-toggle-active" id="add-location-list-btn" type="button">List <span class="glyphicon glyphicon-list-alt list-icon-btn" aria-hidden="true"></span></button>  
+
+              <button class="btn btn-default" id="add-location-map-btn" type="button">Map <span class="glyphicon glyphicon-globe globe-icon-btn" aria-hidden="true"></span></button>  
+
+              <div id="list-location-modal" class="form-group form-inline">
+                <select class="form-control country-picklist input-country" name="country-input" ng-options="country for country in countries" ng-model="selections.Country"></select>
+
+                <select class="form-control state-picklist input-state" name="state-input">
+                  <option>State</option>
+                  <!-- To be inserted dynamically -->
+                </select>
+
+                <select class="form-control city-picklist input-city" name="city-input">
+                  <option>City</option>
+                  <!-- To be inserted dynamically -->
+                </select>
+              </div> <!-- Closes input-location-list -->
+
+              <div id="map-modal">
+                <div class="form-group form-inline" id="modal-map-container">
+                  <!--<p>map map map map map map map map map map map map map map map</p>-->
+                </div> <!-- Closes form-group -->
+              </div> <!-- Closes input-location-map -->
+            </div> <!-- Closes location-info -->   
+
+            <div class="input-group-container">
+              <h4>Media</h4>   
+              <div class="input-group input-add-event-group">
+                <div class="input-group-addon"><i class="fa fa-video-camera add-event-icon"></i></div>
+                <input type="text" class="form-control input-video" placeholder="Copy and paste link to YouTube video" name="video-input">
+              </div> <!-- Closes input-group -->
+
+              <div class="input-group input-photo">
+                <span class="input-group-btn">
+                  <span class="btn btn-photo btn-file"><i class="fa fa-camera add-event-icon"></i> <input class="upload-button input-photo" type="file" name="photo-upload-1" onchange="fileInput(this)"></span>
+                </span>
+                <input type="text" class="form-control" placeholder="Click camera to include photos" readonly>
+              </div> <!-- Closes input-group -->
+              <!-- Inserting more photo upload groups here dynamically -->
+            </div> <!-- Closes media-info -->
+
+            <div class="input-group-container">
+              <div class="form-group email-input-group">
+                <i class="fa fa-exclamation email-icon"></i><label id="email-label"> Add your email address to recieve notifactaions of new achievments.</label>
+                <input type="email" class="form-control input-email" id="input-email" placeholder="Enter email" name="email-input">
+              </div> <!-- Closes email form-group -->
+            </div>
+            
+            <button type="submit" class="btn add-event-submit-button">Submit</button>
+
+            <input class="input-lat" type="text" name="lat" hidden>
+            <input class="input-long" type="text" name="long" hidden>
+
+            </div> <!-- Closes form-group -->
+          </div> <!-- Closes form -->
+        </div> <!-- Closes modal-content -->
+      </div> <!-- Closes modal-dialog -->
+    </div> <!-- Closes modal -->
+
+    <!-- * * DISPLAY EVENT DETAILS MODAL * * -->
+    <div class="modal fade display-event-details-modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+
+          <div class="modal-body event-details-modal-data-container">                              
+            <div class="row text-center">
+              <div class="col-md-12">
+                <div class="header-event-modal">
+                  <div id="name" class="ribbon"> 
+                   <h1><p class="event-data-modal-name">a</p></h1>
+                  </div>
+                  <div class="event-data-modal-trick">a</div> 
+                </div> 
+              </div> 
+
+              <div class="col-sm-9">
+                <div id="photo-vid-container">
+                  <h2 class="details-left">Media</h2>
+                  <div class="btn-group btn-vid-photo-group pull-left" data-toggle="buttons">
+                    <button type="button" id="btn-photo" class="btn btn-toggle-active" name="options"><i class="fa fa-camera glode-icon-btn"></i></button>
+                    <button type="button" id="btn-video" class="btn" name="options"><i class="fa fa-video-camera list-icon-btn"></i></button>
+                  </div>
+                </div>
+
+                <div class="event-modal-extra">
+                  <h2 class="details-left">Details</h2>
+                  <div class="event-data-modal-extra">a</div>
+                </div>      
+              </div><!-- Closes 9 col grid --> 
+
+              <div class="col-sm-3 display-event-info-modal-col-left"> 
+                <div class="border">
+                  <div class="event-modal-discipline">
+                    <h2 class="discipline-left">Discipline</h2>
+                    <img src="img/svg/bmx.svg" alt="example" class="img-responsive svg-icon-left event-data-modal-discipline-graphic">
+                    <div class="event-data-modal-discipline">a</div>
+                  </div>
+
+                  <div class="event-modal-location">
+                    <h2 class="location-left">Location</h2>
+                    <span class="glyphicon glyphicon-globe globe-modal" aria-hidden="true"></span>
+                    <div class="event-data-modal-city">a</div>
+                    <div class="event-data-modal-country">a</div>
+                  </div>
+
+                  <div class="event-modal-date">
+                    <h2 class="date-left">Date</h2>
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    <div class="event-data-modal-date">a</div>
+                  </div>   
+                </div>
+              </div>
+            </div><!-- Closes row --> 
+          </div><!-- Closes modal body --> 
+        </div><!-- Closes modal content --> 
+      </div><!-- Closes modal dialog --> 
+    </div><!-- Closes modal --> 
+
+    <!-- * * LIST VIEW * * -->    
+    <div id="list">
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="rwd-table">
+            <tbody class="list-table" id="list-events">
+              <tr class="event-list-header">
+                <th>Rider</th>
+                <th>Date</th>
+                <th>Trick</th>
+                <th>Discipline</th>
+                <th>Location</th>
+              </tr>
+
+              <!-- map.js ADDS LI DYNAMICALLY -->
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- * * MAP VIEW * * -->
+    <div id="map-container">
+      <div class="map-nav-tools">
+        <span class="fa-stack fa-lg ">
+          <a href="#">
+          <i class="fa fa-search-plus fa-stack-1x fa-inverse btn-toggle-active"></i></a>   
+        </span>
+        <br>
+        <span class="fa-stack fa-lg">
+          <a href="#">
+          <i class="fa fa-search-minus fa-stack-1x fa-inverse"></i></a>   
+        </span>
+        <br>
+      </div>
+
+      <div class="map-info">
+        <div class="map-data-item country-name map-data-display"></div>
+      </div>
+    </div>
+  </div> <!-- * * END MAIN CONTENT CONTAINER * * -->
+
+  <p class="welcome-top">Created by Kollyn Lund and Tanner Bindrup.</p>
+</body>
+
+<script src="js/map.js"></script>
+<script src="js/functions.js"></script>
+<script src="js/bootstrap-modal-carousel.min.js"></script>
+<script src="js/demo.min.js"></script>
+</html>
