@@ -1,124 +1,88 @@
-<ui-view> 
-
-         
+<ui-view>
   <div class="welcome-top row">
-  <div class="pull-left">
-      <img class="logo img-responsive" alt="logo" src="img/logocrop.png"> 
-      </div> 
-
-        <div class="pull-right">
-          <div class="text-secondary-container">
-<<<<<<< HEAD
-              <p class="text-secondary">Got something to bragg about?</p> <button id="add-achievment" ng-click="openAddEvent()">Add it here</button>
-=======
-              <p class="text-secondary">Got something to brag about?</p> <button id="add-achievment" ng-controller="addEventModalController" ng-click="openAddEvent()">Add it here</button>
->>>>>>> origin/master
-          </div>
-        </div> 
- 
-
-
-
+    <div class="pull-left">
+      <img class="logo img-responsive" alt="logo" src="img/logocrop.png">
+    </div>
+    <div class="pull-right">
+      <div class="text-secondary-container">
+        <p class="text-secondary">Got something to bragg about?</p> <button id="add-achievment" ng-click="openAddEvent()">Add it here</button>
+      </div>
+    </div>
   </div>
-
   <div class="row map-nav">
     <div class="col-sm-4">
-
       <div class="btn-group map-list-btns nav-item" data-toggle="buttons">
         <button type="button" id="btn-map" class="btn btn-toggle-active" name="options" ng-click="toggleView(true)"><span class="glyphicon glyphicon-globe globe-icon-btn" aria-hidden="true"></span></button>
         <button type="button" id="btn-list" class="btn" name="options" ng-click="toggleView(false)"><span class="glyphicon glyphicon-list-alt list-icon-btn" aria-hidden="true"></span></button>
       </div>
-
     </div>
-
-      <div class="col-sm-4">
-        <div class="form-inline search-box nav-item" role="search">
-          <div class="input-group search-box">
-            <input type="text" class="form-control search-input" id="search-input" placeholder="{{selections.selected_country || 'Search'}}">
-            <span class="input-group-btn">
-              <button class="btn search-btn" ng-click="resetMap()">GO</button>
-            </span>
-          </div>
+    <div class="col-sm-4">
+      <div class="form-inline search-box nav-item" role="search">
+        <div class="input-group search-box">
+          <input type="text" class="form-control search-input" id="search-input" placeholder="{{selections.selected_country || 'Search'}}">
+          <span class="input-group-btn">
+            <button class="btn search-btn" ng-click="resetMap()">GO</button>
+          </span>
         </div>
       </div>
-
-
+    </div>
     <div class="col-sm-4">
       <div id="filter-map" class="dropdown">
         <button type="button" id="sort-map-dropdown-button" class="btn dropdown-toggle sort-map-btn" data-toggle="dropdown" aria-expanded="false">
-            FILTER MAP <span class="caret"></span>
+        FILTER MAP <span class="caret"></span>
         </button>
         <ul class="dropdown-menu text-center" role="menu" id="sort-map-list">
-          <!-- REMOVED ITEMS HERE - map.js NOW ADDS THEM DYNAMICALLY -->
         </ul>
       </div>
     </div>
-
-
-
-
+  </div>
+  </div>
+  <div class="container">
+  <div id="list" ng-hide="mapview">
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="rwd-table">
+          <tbody class="list-table" id="list-events">
+            <tr class="event-list-header">
+              <th>Rider</th>
+              <th>Date</th>
+              <th>Trick</th>
+              <th>Discipline</th>
+              <th>Location</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-
-  <!-- * * MAIN CONTENT CONTAINER * * -->
-  <div class="container">
-    
-
-    <!-- * * LIST VIEW * * -->    
-    <div id="list" ng-hide="mapview">
-      <div class="row">
-        <div class="col-sm-12">
-          <table class="rwd-table">
-            <tbody class="list-table" id="list-events">
-              <tr class="event-list-header">
-                <th>Rider</th>
-                <th>Date</th>
-                <th>Trick</th>
-                <th>Discipline</th>
-                <th>Location</th>
-              </tr>
-
-              <!-- map.js ADDS LI DYNAMICALLY -->
-
-            </tbody>
-          </table>
-        </div>
-      </div>
+  <div id="map-container" styleng-show="mapview">
+    <div class="map-nav-tools">
+      <span class="fa-stack fa-lg ">
+        <a href="#">
+        <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i></a>
+      </span>
+      <br>
+      <span class="fa-stack fa-lg">
+        <a href="#">
+        <i class="fa fa-search-minus fa-stack-1x fa-inverse"></i></a>
+      </span>
+      <br />
     </div>
-
-    <!-- * * MAP VIEW * * -->
-    <div id="map-container" styleng-show="mapview">
-      <div class="map-nav-tools">
-        <span class="fa-stack fa-lg ">
-          <a href="#">
-          <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i></a>   
-        </span>
-          <br>
-        <span class="fa-stack fa-lg">
-          <a href="#">
-          <i class="fa fa-search-minus fa-stack-1x fa-inverse"></i></a>   
-        </span>
-        <br />
-      </div>
-
-      <div id="map-nav-expand">
-        <span class="fa-stack fa-lg ">
-          <a href="#">
-          <i class="fa fa-expand fa-stack-1x fa-inverse"></i></a>   
-        </span>
-        <br />
-      </div>
-
-      <ui-gmap-google-map center='map.center' zoom='map.zoom' options="map.options">
-        <div ng-repeat="event in testdata">
-          <ui-gmap-marker idKey='event.$id' coords='{latitude:event.Latitude,longitude:event.Longitude}' click="openEventDetails(event)">
-          </ui-gmap-marker>
-        </div>
-      </ui-gmap-google-map>
-
-      <br/>
+    <div id="map-nav-expand">
+      <span class="fa-stack fa-lg ">
+        <a href="#">
+        <i class="fa fa-expand fa-stack-1x fa-inverse"></i></a>
+      </span>
+      <br />
     </div>
-  </div> <!-- * * END MAIN CONTENT CONTAINER * * -->
-
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' options="map.options">
+    <div ng-repeat="event in testdata">
+      <ui-gmap-marker idKey='event.$id' coords='{latitude:event.Latitude,longitude:event.Longitude}' click="openEventDetails(event)">
+      </ui-gmap-marker>
+    </div>
+    </ui-gmap-google-map>
+    <br/>
+  </div>
+  </div>
   <p class="credits">Created by Kollyn Lund and Tanner Bindrup.</p>
 </ui-view>

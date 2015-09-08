@@ -1,20 +1,10 @@
 // Defining the app and dependencies
-<<<<<<< HEAD
 angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps', 'firebase', 'anguvideo'])
-=======
-angular.module('braggingrights', ['ui.router','ui.bootstrap','firebase', 'br-map'])
->>>>>>> origin/master
-
 
 
 /*
 -------- INITIAL CONFIGURATION --------
 */
-<<<<<<< HEAD
-.config(function() {
-    
-})
-
 .config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {   
   uiGmapGoogleMapApiProvider.configure({
     key: 'AIzaSyDEdKE2QWDOArAqz_E_8Y2Uu00qcjtL_44',
@@ -23,11 +13,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap','firebase', 'br-map
   });
 
   $urlRouterProvider.otherwise('/welcome/');
-=======
-.config(function($stateProvider, $urlRouterProvider) {   
-  $urlRouterProvider.otherwise('welcome/');
-  
->>>>>>> origin/master
+
   $stateProvider
     .state('welcome', {
       url: '/welcome/',
@@ -54,13 +40,6 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap','firebase', 'br-map
 
 .controller('mainController', function($scope, $modal, uiGmapGoogleMapApi, FirebaseData){
   $scope.mapview = true;
-<<<<<<< HEAD
-=======
-  $scope.selections = {world:null, whole_world:null};
-  $scope.resetMap = function() {
-    $scope.selections.world = $scope.selections.whole_world;
-  }
->>>>>>> origin/master
 
   uiGmapGoogleMapApi.then(function(maps) {
     $scope.map = { 
@@ -105,7 +84,6 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap','firebase', 'br-map
     $scope.mapview = mapview;
   };
 })
-<<<<<<< HEAD
 
 
 .factory('FirebaseData', function($firebaseArray) {
@@ -143,11 +121,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap','firebase', 'br-map
     }
     $scope.possible_days.shift();
   }
-=======
-.controller('addEventModalInstanceController', function($scope, $modalInstance, $state, $stateParams) {
-  
 
->>>>>>> origin/master
   $scope.cancel = function () {
 
     $modalInstance.dismiss('cancel');
