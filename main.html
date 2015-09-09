@@ -76,10 +76,8 @@
       <br />
     </div>
     <ui-gmap-google-map center='map.center' zoom='map.zoom' options="map.options">
-    <div ng-repeat="event in testdata">
-      <ui-gmap-marker idKey='event.$id' coords='{latitude:event.Latitude,longitude:event.Longitude}' click="openEventDetails(event)">
-      </ui-gmap-marker>
-    </div>
+      <ui-gmap-markers models="firebase_events" idKey="'$id'" coords="'coords'" click="clickedMarker">
+      </ui-gmap-markers>
     </ui-gmap-google-map>
     <br/>
   </div>
