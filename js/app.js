@@ -38,23 +38,31 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	}
 })
 
-.controller('mainController', function($scope, $modal, uiGmapGoogleMapApi, FirebaseData){
-	$scope.mapview = true;
-	$scope.firebase_events = FirebaseData.allEventsArray;
+.controller('mainController', function($scope, $filter, $modal, uiGmapGoogleMapApi, FirebaseData){
+	$scope.data = {};
+	$scope.data.firebase_events = FirebaseData.allEventsArray;
 	uiGmapGoogleMapApi.then(function(maps) {
-		$scope.map = { 
+		$scope.data.mapview = true;
+		$scope.data.map = { 
 			center: { latitude: 0, longitude: 0 }, 
 			zoom: 2, 
 			options:{
-				mapTypeId: maps.MapTypeId.ROADMAP,
-				minZoom: 1.85
+				mapTypeId: maps.MapTypeId.SATELLITE,
+				minZoom: 2
 			} 
 		};
+	});
+	$scope.$watchGroup(['data.searchbar_text','data.firebase_events'],function(newValues, oldValues) {
+		console.log('things changed');
+		$scope.data.filteredMarkers = $filter("filter")(newValues[1], newValues[0]);
+		if (!$scope.filteredMarkers) {
+			return;
+		}
 	});
 
 	$scope.openAddEvent = function () {
 		var modalInstance = $modal.open({
-			animation: $scope.animationsEnabled,
+			animation: true,
 			templateUrl: 'templates/addEventModal.html',
 			controller: 'addEventModalInstanceController',
 			size: 'lg'
@@ -77,7 +85,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		$scope.openEventDetails(c);
 	};
 	$scope.toggleView = function(mapview) {
-		$scope.mapview = mapview;
+		$scope.data.mapview = mapview;
 	};
 })
 
