@@ -54,7 +54,6 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		};
 	});
 	$scope.$watchGroup(['data.searchbar_text','data.firebase_events'],function(newValues, oldValues) {
-		console.log('things changed');
 		$scope.data.filteredMarkers = $filter("filter")(newValues[1], newValues[0]);
 
 		if (!$scope.data.filteredMarkers) {
@@ -63,6 +62,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	});
 
 	$scope.openAddEvent = function () {
+		console.log('that thing did happen');
 		var modalInstance = $modal.open({
 			animation: true,
 			templateUrl: 'templates/addEventModal.html',
@@ -72,9 +72,9 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	};
 	$scope.openEventDetails = function(the_event) {
 		var modalInstance = $modal.open({
-			animation: $scope.animationsEnabled,
+			animation: true,
 			templateUrl: 'templates/eventDetailsModal.html',
-			controller: 'addEventModalInstanceController',
+			controller: 'eventDetailsModalInstanceController',
 			size: 'lg',
 			resolve: {
 				the_event: function () {
@@ -130,14 +130,24 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 /*
 -------- MODAL CONTROLLERS --------
 */
-.controller('addEventModalInstanceController', function($scope, $modalInstance, $state, $stateParams, the_event) {
+.controller('addEventModalInstanceController', function($scope, $modalInstance, uiGmapGoogleMapApi) {
+	uiGmapGoogleMapApi.then(function(maps) {
+		$scope.mapview = false;
+		$scope.map = { 
+			center: { latitude: 0, longitude: 0 }, 
+			zoom: 2, 
+			options:{
+				mapTypeId: maps.MapTypeId.SATELLITE,
+				minZoom: 2
+			} 
+		};
+	});
+
 	$scope.selections = {};
 	$scope.touches = {};
 	$scope.possible_months = [{days:31,month:'January'},{days:28,month:'February'},{days:31,month:'March'},{days:30,month:'April'},{days:31,month:'May'},{days:30,month:'June'},{days:31,month:'July'},{days:31,month:'August'},{days:30,month:'September'},{days:31,month:'October'},{days:30,month:'November'},{days:31,month:'December'}];
 	$scope.possible_days = [];
-	$scope.disciplines = ['Dirtbike','Mtn. Bike','Skateboard','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
-
-	$scope.theEvent = the_event;
+	$scope.disciplines = ['MOTO','MTB','SK8','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
 
 	$scope.setDays = function(month) {
 		if (month) {
@@ -154,4 +164,43 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 
 		$modalInstance.dismiss('cancel');
 	}
+
+
+
+/* 
+-------- A bunch of trial stuff --------
+*/
+	$scope.today = function() {
+		return new Date();
+	};
+	$scope.dt = $scope.today();
+	$scope.minDate = new Date(1000,1,1)
+	$scope.maxDate = $scope.today();
+	$scope.status = {
+		opened: false
+	};
+	$scope.dateOptions = {
+		formatYear: 'yy',
+		startingDay: 1
+	};
+
+	$scope.open = function($event) {
+		$scope.status.opened = true;
+	};
+
+
 })
+.controller('eventDetailsModalInstanceController', function($scope, $modalInstance, $state, $stateParams, the_event) {
+	$scope.theEvent = the_event;
+
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	}
+})
+
+
+
+
+
+
+

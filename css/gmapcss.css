@@ -1,4 +1,11 @@
-.angular-google-map-container { 
+.main-map .angular-google-map-container { 
 	height: 498px;
 	margin-top: -3.35%;
+}
+
+.add-event-map {
+	margin-top: 2%;
+}
+.add-event-map .angular-google-map-container { 
+	height: 300px;
 }

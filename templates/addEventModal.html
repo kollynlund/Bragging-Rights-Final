@@ -13,7 +13,7 @@
 			<div class="add-event-form">
 				<div class="form-group add-event-modal-main-form-group">
 				<div class="input-group-container">
-					<h4>Achievment Info</h4>
+					<h4>Achievement Info</h4>
 					<div class="input-group input-add-event-group">
 						<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
 						<input type="text" class="form-control input-name" name="name-input" placeholder="Enter the full name of the person who achieved greatness" ng-model="selections.Name">
@@ -26,23 +26,7 @@
 
 					<div class="input-group input-add-event-group">
 						<div class="input-group-addon"><i class="fa fa-calendar add-event-icon"></i></div>
-						<select class="form-control input-month" name="month-input">
-							<option>Month <i class="fa fa-chevron-down"></i></option>
-							<option class="month-option" days="31">- January</option>
-							<option class="month-option" days="28">- February</option>
-							<option class="month-option" days="31">- March</option>
-							<option class="month-option" days="30">- April</option>
-							<option class="month-option" days="31">- May</option>
-							<option class="month-option" days="30">- June</option>
-							<option class="month-option" days="31">- July</option>
-							<option class="month-option" days="31">- August</option>
-							<option class="month-option" days="30">- September</option>
-							<option class="month-option" days="31">- October</option>
-							<option class="month-option" days="30">- November</option>
-							<option class="month-option" days="31">- December</option>
-						</select>	
-						<select class="form-control input-day" name="day-input"></select> 
-						<input class="form-control input-year" placeholder="Add 4 digit year" name="year-input"> 
+						<input type="date" class="form-control" datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" />
 					</div> <!-- Closes input-date -->	 
 
 					<div class="input-group input-add-event-group">
@@ -52,7 +36,7 @@
 					</div> <!-- Closes input-discipline --> 
 
 					<div class="form-group">
-						<div class="input-group-addon">Detials <i class="fa fa-info-circle add-event-icon"></i></div>
+						<div class="input-group-addon">Details <i class="fa fa-info-circle add-event-icon"></i></div>
 						<textarea class="form-control input-details" id="input-details" placeholder="Additional details about the achievment" name="details-input" ng-model="selections['Additional Information']"></textarea>
 					</div> <!-- Closes input-details -->
 				</div> <!-- Closes basic trick info -->
@@ -60,29 +44,33 @@
 				<div class="input-group-container">
 					<h4 style="display:block">Location of achievement</h4>
 
-					<button class="btn btn-default btn-toggle-active" id="add-location-list-btn" type="button">List <span class="glyphicon glyphicon-list-alt list-icon-btn" aria-hidden="true"></span></button>	
+					<button class="btn btn-default" ng-class="{'btn-toggle-active': !mapview}" id="add-location-list-btn" type="button" ng-click="mapview = false">Enter Lat/Long <span class="glyphicon glyphicon-list-alt list-icon-btn"></span></button>	
 
-					<button class="btn btn-default" id="add-location-map-btn" type="button">Map <span class="glyphicon glyphicon-globe globe-icon-btn" aria-hidden="true"></span></button>	
+					<button class="btn btn-default" id="add-location-map-btn" ng-class="{'btn-toggle-active': mapview}" type="button" ng-click="mapview = true">Find on Map <span class="glyphicon glyphicon-globe globe-icon-btn"></span></button>
 
-					<div id="list-location-modal" class="form-group form-inline">
-						<select class="form-control country-picklist input-country" name="country-input" ng-options="country for country in countries" ng-model="selections.Country"></select>
+					<div ng-if="!mapview">
+						<div class="input-group input-add-event-group">
+							<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+							<input type="text" class="form-control input-name" placeholder="Enter city" ng-model="selections.City">
+						</div> <!-- Closes input-name -->	
 
-						<select class="form-control state-picklist input-state" name="state-input">
-							<option>State</option>
-							<!-- To be inserted dynamically -->
-						</select>
+						<div class="input-group input-add-event-group">
+							<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+							<input type="text" class="form-control input-name" placeholder="Enter country" ng-model="selections.Country">
+						</div> <!-- Closes input-name -->	
 
-						<select class="form-control city-picklist input-city" name="city-input">
-							<option>City</option>
-							<!-- To be inserted dynamically -->
-						</select>
-					</div> <!-- Closes input-location-list -->
+						<div class="input-group input-add-event-group">
+							<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+							<input type="number" class="form-control input-name" placeholder="Enter latitude" ng-model="selections.Latitude">
+						</div> <!-- Closes input-name -->							 
 
-					<div id="map-modal">
-						<div class="form-group form-inline" id="modal-map-container">
-							<!--<p>map map map map map map map map map map map map map map map</p>-->
-						</div> <!-- Closes form-group -->
-					</div> <!-- Closes input-location-map -->
+						<div class="input-group input-add-event-group">
+							<div class="input-group-addon"><i class="fa fa-star add-event-icon"></i></div>
+							<input type="number" class="form-control input-trick" placeholder="Enter longitude" ng-model="selections.Longitude">
+						</div> <!-- Closes input-trick -->
+					</div>
+
+					<ui-gmap-google-map class="add-event-map" center='map.center' zoom='map.zoom' options="map.options" ng-if="mapview"></ui-gmap-google-map>
 				</div> <!-- Closes location-info -->	 
 
 				<div class="input-group-container">
@@ -91,19 +79,11 @@
 						<div class="input-group-addon"><i class="fa fa-video-camera add-event-icon"></i></div>
 						<input type="text" class="form-control input-video" placeholder="Copy and paste link to YouTube video" name="video-input">
 					</div> <!-- Closes input-group -->
-
-					<div class="input-group input-photo">
-						<span class="input-group-btn">
-							<span class="btn btn-photo btn-file"><i class="fa fa-camera add-event-icon"></i> <input class="upload-button input-photo" type="file" name="photo-upload-1" onchange="fileInput(this)"></span>
-						</span>
-						<input type="text" class="form-control" placeholder="Click camera to include photos" readonly>
-					</div> <!-- Closes input-group -->
-					<!-- Inserting more photo upload groups here dynamically -->
 				</div> <!-- Closes media-info -->
 
 				<div class="input-group-container">
 					<div class="form-group email-input-group">
-						<i class="fa fa-exclamation email-icon"></i><label id="email-label"> Add your email address to recieve notifactaions of new achievments.</label>
+						<i class="fa fa-exclamation email-icon"></i><label id="email-label"> Add your email address to recieve notifications of new achievments.</label>
 						<input type="email" class="form-control input-email" id="input-email" placeholder="Enter email" name="email-input">
 					</div> <!-- Closes email form-group -->
 				</div>
