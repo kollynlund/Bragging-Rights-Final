@@ -33,6 +33,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 -------- MAIN CONTROLLERS --------
 */
 .controller('welcomeController', function($scope, $state, FirebaseData){
+	// FirebaseData.writeNewEvents();
 	$scope.enterSite = function() {
 		$state.go('main');
 	}
@@ -55,7 +56,8 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	$scope.$watchGroup(['data.searchbar_text','data.firebase_events'],function(newValues, oldValues) {
 		console.log('things changed');
 		$scope.data.filteredMarkers = $filter("filter")(newValues[1], newValues[0]);
-		if (!$scope.filteredMarkers) {
+
+		if (!$scope.data.filteredMarkers) {
 			return;
 		}
 	});
@@ -106,14 +108,16 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 			})
 		},
 		// writeNewEvents: function() {
-		//	 return rootObj.$loaded().then(function(){
-		//		 console.log('dumbdumb');
-		//		 realRootObj['New Events'] = rootObj.map(function(item) {
-		//			 return _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
-		//			 // return _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
-		//		 });
-		//		 realRootObj.$save();
-		//	 });
+		// 	 return rootObj.$loaded().then(function(){
+		// 		 console.log('dumbdumb');
+		// 		 realRootObj['New Events'] = rootObj.map(function(item) {
+		// 			 var pre = _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
+		// 			 pre.imgpath = item.Discipline ? '../img/icon_pngs/'+item.Discipline.toLowerCase()+'.png' : '';
+		// 			 return pre;
+		// 			 // return _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
+		// 		 });
+		// 		 realRootObj.$save();
+		// 	 });
 		// },
 
 		allEventsArray: rootObj

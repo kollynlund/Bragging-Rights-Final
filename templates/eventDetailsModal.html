@@ -39,7 +39,7 @@
 							<div class="border">
 								<div class="event-modal-discipline">
 									<h2 class="discipline-left">Discipline</h2>
-									<img src="img/svg/bmx.svg" alt="example" class="img-responsive svg-icon-left event-data-modal-discipline-graphic">
+									<img ng-src="{{'img/svg/'+theEvent.Discipline.toLowerCase()+'.svg'}}" alt="example" class="img-responsive svg-icon-left event-data-modal-discipline-graphic">
 									<div class="event-data-modal-discipline">{{theEvent.Discipline}}</div>
 								</div>
 								<div class="event-modal-location">
