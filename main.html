@@ -19,9 +19,9 @@
     <div class="col-sm-4">
       <div class="form-inline search-box nav-item" role="search">
         <div class="input-group search-box">
-          <input type="text" class="form-control search-input" id="search-input" placeholder="{{selections.selected_country || 'Search'}}">
+          <input type="text" class="form-control search-input" id="search-input" placeholder="Search" ng-model="data.searchbar_text">
           <span class="input-group-btn">
-            <button class="btn search-btn" ng-click="resetMap()">GO</button>
+            <button class="btn search-btn">GO</button>
           </span>
         </div>
       </div>
@@ -38,7 +38,7 @@
   </div>
   </div>
   <div class="container">
-  <div id="list" ng-hide="mapview">
+  <div id="list" ng-hide="data.mapview">
     <div class="row">
       <div class="col-sm-12">
         <table class="rwd-table">
@@ -50,12 +50,19 @@
               <th>Discipline</th>
               <th>Location</th>
             </tr>
+            <tr ng-repeat="event in data.filteredMarkers">
+              <td>{{event.Name}}</td>
+              <td>{{event.Date}}</td>
+              <td>{{event.Trick}}</td>
+              <td>{{event.Discipline}}</td>
+              <td>{{event.City + ', ' + event.Country}}</td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-  <div id="map-container" styleng-show="mapview">
+  <div id="map-container" ng-show="data.mapview">
     <div class="map-nav-tools">
       <span class="fa-stack fa-lg ">
         <a href="#">
@@ -75,8 +82,8 @@
       </span>
       <br />
     </div>
-    <ui-gmap-google-map center='map.center' zoom='map.zoom' options="map.options">
-      <ui-gmap-markers models="firebase_events" idKey="'$id'" coords="'coords'" click="clickedMarker">
+    <ui-gmap-google-map center='data.map.center' zoom='data.map.zoom' options="data.map.options">
+      <ui-gmap-markers models="data.filteredMarkers" idKey="'$id'" coords="'coords'" click="clickedMarker">
       </ui-gmap-markers>
     </ui-gmap-google-map>
     <br/>
