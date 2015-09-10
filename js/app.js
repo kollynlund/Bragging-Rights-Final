@@ -40,6 +40,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 })
 
 .controller('mainController', function($scope, $window, $filter, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
+	$scope.windowWidth = $window.innerWidth;
 	$scope.data = {};
 	$scope.data.firebase_events = FirebaseData.allEventsArray;
 	$scope.map_error = true;
