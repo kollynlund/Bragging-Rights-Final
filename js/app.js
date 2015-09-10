@@ -196,6 +196,20 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	return _;
 })
 
+.directive('watchResize', function($window) {
+	return function($scope) {
+		$scope.initializeWindowSize = function() {
+			$scope.windowHeight = $window.innerHeight;
+			return $scope.windowWidth = $window.innerWidth;
+		};
+		$scope.initializeWindowSize();
+		return angular.element($window).bind('resize', function() {
+			$scope.initializeWindowSize();
+			return $scope.$apply();
+		});
+	};
+})
+
 /*
 -------- MODAL CONTROLLERS --------
 */
