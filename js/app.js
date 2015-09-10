@@ -39,7 +39,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	}
 })
 
-.controller('mainController', function($scope, $filter, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
+.controller('mainController', function($scope, $window, $filter, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
 	$scope.data = {};
 	$scope.data.firebase_events = FirebaseData.allEventsArray;
 	$scope.map_error = true;
@@ -59,29 +59,40 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 
 		uiGmapIsReady.promise().then(function(map) {
 			$scope.data.map_control = $scope.map.control.getGMap();
-			function createLatLongBounds(sws,sww,nen,nee) {
-				return new maps.LatLngBounds(new maps.LatLng(sws,sww), new maps.LatLng(nen,nee));
+			console.log('projection:',$scope.data.map_control.getProjection().fromPointToLatLng(10,10));
+			function createBounds(centermax) {
+				return new maps.LatLngBounds(new maps.LatLng(-centermax,-180), new maps.LatLng(centermax,180));
 			};
 			// var allowedBoundsArray = {
-			// 	'2': ,
+			// 	'2': createBounds(63.6771078),
+			// 	'3': createBounds(63.6771078),
+			// 	'4': createBounds(63.6771078),
+			// 	'5': createBounds(63.6771078),
+			// 	'6': createBounds(63.6771078),
+			// 	'7': createBounds(63.6771078),
+			// 	'8': createBounds(63.6771078),
+			// 	'9': createBounds(63.6771078),
+			// 	'10': createBounds(63.6771078),
+			// 	'11': createBounds(63.6771078),
+			// 	'12': createBounds(63.6771078),
+			// 	'13': createBounds(63.6771078),
+			// 	'14': createBounds(63.6771078),
+			// 	'15': createBounds(63.6771078),
+			// 	'16': createBounds(63.6771078),
+			// 	'17': createBounds(63.6771078),
+			// 	'18': createBounds(63.6771078),
+			// 	'19': createBounds(63.6771078),
+			// 	'20': createBounds(63.6771078),
+			// 	'21': createBounds(63.6771078),
 			// };
-			var allowedBounds = createLatLongBounds(-90,-180,90,180);
-			// new maps.LatLngBounds(
-			// 	new maps.LatLng(-67, -180), 
-			// 	new maps.LatLng(67, 180)
-			// );
+
 
 			maps.event.addListener($scope.data.map_control,'center_changed',function() { checkBounds(); });
-
+			var allowedBounds = new maps.LatLngBounds(
+				new maps.LatLng(-73.6102172, -180), 
+				new maps.LatLng(67, 180)
+			);
 			function checkBounds() {
-				var AmaxX = $scope.data.map_control.getBounds().getNorthEast().lng();
-				console.log('east',AmaxX);
-				var AmaxY = $scope.data.map_control.getBounds().getNorthEast().lat();
-				console.log('north',AmaxY);
-				var AminX = $scope.data.map_control.getBounds().getSouthWest().lng();
-				console.log('west',AminX);
-				var AminY = $scope.data.map_control.getBounds().getSouthWest().lat();
-				console.log('south',AminY);
 
 				if(! allowedBounds.contains($scope.data.map_control.getCenter())) {
 					var C = $scope.data.map_control.getCenter();
@@ -106,6 +117,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		})
 	});
 
+	// Watch for changes in the search text and the event array
 	$scope.$watchGroup(['data.searchbar_text','data.firebase_events'],function(newValues, oldValues) {
 		$scope.data.filteredMarkers = $filter("filter")(newValues[1], newValues[0]);
 
@@ -113,6 +125,12 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 			return;
 		}
 	});
+	// Watch for window resize events
+	$scope.$watch(function(){
+       return $window.innerWidth;
+    }, function(value) {
+       $scope.windowWidth = value;
+   });
 
 	$scope.openAddEvent = function () {
 		console.log('that thing did happen');
