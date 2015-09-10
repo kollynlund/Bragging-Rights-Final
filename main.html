@@ -38,12 +38,12 @@
   </div>
   </div>
   <div class="container">
-  <div id="list" ng-hide="data.mapview">
+  <div id="list" ng-if="!data.mapview">
     <div class="row">
       <div class="col-sm-12">
 
 
-        <table ng-if="windowWidth > 800" class="table-big">
+        <table watchResize ng-show="windowWidth > 800" class="table-big">
             <tr>
               <th>Rider</th>
               <th>Date</th>
@@ -60,11 +60,21 @@
             </tr>
         </table>
 
+        <div watchResize ng-show="windowWidth < 800" style="margin-top: 1em">
+          <div class="table-small" ng-repeat="event in data.filteredMarkers" ng-click="openEventDetails(event)">
+            <h5><span>Rider: </span> {{event.Name}}</h5>
+            <h5><span>Date: </span> {{event.Date}}</h5>
+            <h5><span>Trick: </span> {{event.Trick}}</h5>
+            <h5><span>Discipline: </span> {{event.Discipline}}</h5>
+            <h5><span>Location: </span> {{event.City + (event.City ? ' - ' : '') + event.Country}}</h5>
+          </div>
+        </div>
+
 
       </div>
     </div>
   </div>
-  <div id="map-container" ng-show="data.mapview">
+  <div id="map-container" ng-if="data.mapview">
     <h1 class="error" ng-if="map_error">Map failed to load. Please use the list view.</h1>
     <ui-gmap-google-map class="main-map" center='map.center' zoom='map.zoom' options="map.options" bounds="map.bounds" control="map.control" pan="'true'">
       <!-- <ui-gmap-markers models="data.filteredMarkers" idKey="'$id'" coords="'coords'" click="clickedMarker" icon="'imgpath'"></ui-gmap-markers> -->

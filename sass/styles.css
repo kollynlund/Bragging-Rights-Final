@@ -6,14 +6,37 @@
   background: #333;
   color: #fff; }
 
+.table-small {
+  border: 2px solid #eee;
+  border-radius: 0px;
+  font-family: 'Roboto Slab', sans-serif;
+  background: #333;
+  color: #fff;
+  border-bottom: 2px solid transparent; }
+  .table-small span {
+    color: #FFCB27;
+    margin-left: .5em; }
+  .table-small:last-child {
+    margin-bottom: 1em;
+    border-bottom: 2px solid #eee; }
+  .table-small:first-child {
+    margin-top: 1em !important; }
+  .table-small:hover {
+    background-color: #555;
+    cursor: pointer; }
+
 #list {
   width: 77%;
   margin: auto; }
+  @media (max-width: 950px) {
+    #list {
+      width: 90% !important; } }
 
 th {
   font-size: 1.5em;
   color: #FFCB27;
-  padding: 1em; }
+  padding: 1em;
+  padding-left: .5em; }
 
 .table-big-data td {
   padding: .5em; }
