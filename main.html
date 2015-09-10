@@ -43,7 +43,7 @@
       <div class="col-sm-12">
 
 
-        <table watchResize ng-show="windowWidth > 800" class="table-big">
+        <table watchResize ng-if="windowWidth >= 800" class="table-big">
             <tr>
               <th>Rider</th>
               <th>Date</th>
@@ -60,7 +60,7 @@
             </tr>
         </table>
 
-        <div watchResize ng-show="windowWidth < 800" style="margin-top: 1em">
+        <div watchResize ng-if="windowWidth < 800" style="margin-top: 1em">
           <div class="table-small" ng-repeat="event in data.filteredMarkers" ng-click="openEventDetails(event)">
             <h5><span>Rider: </span> {{event.Name}}</h5>
             <h5><span>Date: </span> {{event.Date}}</h5>
