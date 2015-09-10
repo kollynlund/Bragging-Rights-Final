@@ -82,7 +82,7 @@
       </span>
       <br />
     </div>
-    <ui-gmap-google-map class="main-map" center='data.map.center' zoom='data.map.zoom' options="data.map.options">
+    <ui-gmap-google-map class="main-map" center='map.center' zoom='map.zoom' options="map.options" bounds="map.bounds" control="map.control" pan="'true'">
       <ui-gmap-markers models="data.filteredMarkers" idKey="'$id'" coords="'coords'" click="clickedMarker" icon="'imgpath'">
       </ui-gmap-markers>
     </ui-gmap-google-map>

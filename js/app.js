@@ -39,20 +39,71 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	}
 })
 
-.controller('mainController', function($scope, $filter, $modal, uiGmapGoogleMapApi, FirebaseData){
+.controller('mainController', function($scope, $filter, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
 	$scope.data = {};
 	$scope.data.firebase_events = FirebaseData.allEventsArray;
 	uiGmapGoogleMapApi.then(function(maps) {
 		$scope.data.mapview = true;
-		$scope.data.map = { 
+		$scope.map = { 
 			center: { latitude: 0, longitude: 0 }, 
 			zoom: 2, 
-			options:{
+			options: {
 				mapTypeId: maps.MapTypeId.SATELLITE,
 				minZoom: 2
-			} 
+			},
+			bounds: {northeast:{latitude:90,longitude:-180},southwest:{latitude:-90,longitude:180}},
+			control: {}
 		};
+
+		uiGmapIsReady.promise().then(function(map) {
+			$scope.data.map_control = $scope.map.control.getGMap();
+			function createLatLongBounds(sws,sww,nen,nee) {
+				return new maps.LatLngBounds(new maps.LatLng(sws,sww), new maps.LatLng(nen,nee));
+			};
+			// var allowedBoundsArray = {
+			// 	'2': ,
+			// };
+			var allowedBounds = createLatLongBounds(-90,-180,90,180);
+			// new maps.LatLngBounds(
+			// 	new maps.LatLng(-67, -180), 
+			// 	new maps.LatLng(67, 180)
+			// );
+
+			maps.event.addListener($scope.data.map_control,'center_changed',function() { checkBounds(); });
+
+			function checkBounds() {
+				var AmaxX = $scope.data.map_control.getBounds().getNorthEast().lng();
+				console.log('east',AmaxX);
+				var AmaxY = $scope.data.map_control.getBounds().getNorthEast().lat();
+				console.log('north',AmaxY);
+				var AminX = $scope.data.map_control.getBounds().getSouthWest().lng();
+				console.log('west',AminX);
+				var AminY = $scope.data.map_control.getBounds().getSouthWest().lat();
+				console.log('south',AminY);
+
+				if(! allowedBounds.contains($scope.data.map_control.getCenter())) {
+					var C = $scope.data.map_control.getCenter();
+					var X = C.lng();
+					var Y = C.lat();
+
+					var AmaxX = allowedBounds.getNorthEast().lng();
+					var AmaxY = allowedBounds.getNorthEast().lat();
+					var AminX = allowedBounds.getSouthWest().lng();
+					var AminY = allowedBounds.getSouthWest().lat();
+
+					if (X < AminX) {X = AminX;}
+					if (X > AmaxX) {X = AmaxX;}
+					if (Y < AminY) {Y = AminY;}
+					if (Y > AmaxY) {Y = AmaxY;}
+
+					// $scope.data.map_control.setCenter(new maps.LatLng(Y,X));
+				}
+			}
+
+
+		})
 	});
+
 	$scope.$watchGroup(['data.searchbar_text','data.firebase_events'],function(newValues, oldValues) {
 		$scope.data.filteredMarkers = $filter("filter")(newValues[1], newValues[0]);
 
@@ -94,13 +145,17 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 
 .factory('FirebaseData', function($firebaseArray, $firebaseObject) {
 	var rootRef = new Firebase('https://braggingrights.firebaseio.com/New Events');
-	var realRootRef = new Firebase('https://braggingrights.firebaseio.com');
 	var rootObj = new $firebaseArray(rootRef);
-	var realRootObj = new $firebaseObject(realRootRef);
+
+	var realRootRef = new Firebase('https://braggingrights.firebaseio.com/Test Events');
+	var realRootObj = new $firebaseArray(realRootRef);
 
 	return {
-		pushObjectToFirebase: function(object) {
+		pushEventToFirebase: function(object) {
 			rootObj.$add(object);
+		},
+		pushEventToFirebaseTest: function(object) {
+			realRootObj.$add(object);
 		},
 		getAllEventsArray: function() {
 			return rootObj.$loaded().then(function(){
@@ -130,7 +185,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 /*
 -------- MODAL CONTROLLERS --------
 */
-.controller('addEventModalInstanceController', function($scope, $modalInstance, uiGmapGoogleMapApi) {
+.controller('addEventModalInstanceController', function($scope, $modalInstance, uiGmapGoogleMapApi, FirebaseData) {
 	uiGmapGoogleMapApi.then(function(maps) {
 		$scope.mapview = false;
 		$scope.map = { 
@@ -142,38 +197,14 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 			} 
 		};
 	});
-
-	$scope.selections = {};
-	$scope.touches = {};
-	$scope.possible_months = [{days:31,month:'January'},{days:28,month:'February'},{days:31,month:'March'},{days:30,month:'April'},{days:31,month:'May'},{days:30,month:'June'},{days:31,month:'July'},{days:31,month:'August'},{days:30,month:'September'},{days:31,month:'October'},{days:30,month:'November'},{days:31,month:'December'}];
-	$scope.possible_days = [];
 	$scope.disciplines = ['MOTO','MTB','SK8','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
+	$scope.fields = {};
 
-	$scope.setDays = function(month) {
-		if (month) {
-			$scope.possible_days = _.range(_.filter($scope.possible_months,function(item){return item.month == month})[0].days+1);
-		}
-		else {
-			$scope.selections.Day = '';
-			$scope.possible_days = [];
-		}
-		$scope.possible_days.shift();
-	}
-
-	$scope.cancel = function () {
-
-		$modalInstance.dismiss('cancel');
-	}
-
-
-
-/* 
--------- A bunch of trial stuff --------
-*/
+	// Configuration for the datepicker
 	$scope.today = function() {
 		return new Date();
 	};
-	$scope.dt = $scope.today();
+	$scope.fields.Date = $scope.today();
 	$scope.minDate = new Date(1000,1,1)
 	$scope.maxDate = $scope.today();
 	$scope.status = {
@@ -183,12 +214,38 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		formatYear: 'yy',
 		startingDay: 1
 	};
-
 	$scope.open = function($event) {
 		$scope.status.opened = true;
 	};
+	// -------------------------------
 
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	};
+	$scope.submit = function() {
 
+		// Do event verification here and set scope variables corresponding to error behavior
+		var verifyEvent = function(the_new_event) {
+			return true;
+		};
+
+		var newEvent = {
+			'Additional Information':$scope.fields['Additional Information'] || null,
+			'City':$scope.fields.City || null,
+			'Country':$scope.fields.Country || null,
+			'Date':$scope.fields.Date || null,
+			'Discipline':$scope.fields.Discipline || null,
+			'Name':$scope.fields.Name || null,
+			'Trick':$scope.fields.Trick || null,
+			'Video':$scope.fields.Video || null,
+			'coords':{latitude:$scope.fields.Latitude, longitude:$scope.fields.Longitude} || null,
+			'imgpath':($scope.fields.Discipline ? '../img/icon_pngs/'+$scope.fields.Discipline.toLowerCase()+'.png' : null)
+		};
+		if (verifyEvent(newEvent)) {
+			FirebaseData.pushEventToFirebase(newEvent);
+			$modalInstance.close();	
+		}
+	};
 })
 .controller('eventDetailsModalInstanceController', function($scope, $modalInstance, $state, $stateParams, the_event) {
 	$scope.theEvent = the_event;
