@@ -8,6 +8,11 @@
   font-family: 'Roboto Slab', sans-serif; 
 }
 
+#list {
+  width: 77%;
+  margin: auto;
+}
+
 th {
   font-size: 1.5em;
 }
@@ -40,12 +45,12 @@ th {
 .rwd-table td:last-child {
   padding-bottom: .5em;
 }
-.rwd-table td:before {
-  content: attr(data-th) ": ";
-  font-weight: bold;
-  width: 6.5em;
-  display: inline-block;
-}
+// .rwd-table td:before {
+//   content: attr(data-th) ": ";
+//   font-weight: bold;
+//   width: 6.5em;    
+//   display: inline-block;
+// }
 .rwd-table {
   background: #333;
   color: #fff;

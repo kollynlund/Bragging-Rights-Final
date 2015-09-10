@@ -43,19 +43,19 @@
       <div class="col-sm-12">
         <table class="rwd-table">
           <tbody class="list-table" id="list-events">
-            <tr class="event-list-header">
+<!--             <tr class="event-list-header">
               <th>Rider</th>
               <th>Date</th>
               <th>Trick</th>
               <th>Discipline</th>
               <th>Location</th>
-            </tr>
+            </tr> -->
             <tr ng-repeat="event in data.filteredMarkers">
-              <td>{{event.Name}}</td>
-              <td>{{event.Date}}</td>
-              <td>{{event.Trick}}</td>
-              <td>{{event.Discipline}}</td>
-              <td>{{event.City + ', ' + event.Country}}</td>
+              <td>Rider: {{event.Name}}</td>
+              <td>Date: {{event.Date}}</td>
+              <td>Trick: {{event.Trick}}</td>
+              <td>Discipline: {{event.Discipline}}</td>
+              <td>Location: {{event.City + ', ' + event.Country}}</td>
             </tr>
           </tbody>
         </table>
@@ -63,6 +63,7 @@
     </div>
   </div>
   <div id="map-container" ng-show="data.mapview">
+    <h1 class="error">Map failed to load. Please use the list view.</h1>
     <div class="map-nav-tools">
       <span class="fa-stack fa-lg ">
         <a href="#">

@@ -19,8 +19,11 @@
   @media (max-width: 767px) {
     max-width: 90%;
   }
+}
 
-
+.error {
+  color: red !important;
+  text-align: center;
 }
 
 .map-info {
