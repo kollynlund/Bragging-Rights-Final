@@ -140,8 +140,14 @@ ____________________________________*/
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
   border-top: none;
-  @media (max-width: 767px) {
+  @media (max-width: 950px) {
     max-width: 90%;
+  }
+  @media (max-width: 600px) {
+    max-width: 100%;
+    border-radius: 0px;
+    border-right: none;
+    border-left: none;
   }
 
 }
@@ -157,6 +163,10 @@ ____________________________________*/
 
 #filter-map {
   float: right;
+  @media (max-width: 767px) {
+    float: none;
+    width: 100%;
+  }
 }
 
 #sort-map-dropdown-button {
@@ -366,9 +376,11 @@ transform: rotate(3deg);
   font-family: 'Roboto Slab', sans-serif; 
   margin: 0px !important;
   padding: 5px;
-  text-align: right;
-  border-bottom: 2px solid #ccc;
+  text-align: left;
+  border-top: 2px solid #ccc;
   margin-bottom: 5px;
+  padding-bottom: 4px;
+  padding-left: 10%;
   @media (max-width: 480px) {
     font-size: .85em;
   }

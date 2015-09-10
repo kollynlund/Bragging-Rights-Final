@@ -41,48 +41,31 @@
   <div id="list" ng-hide="data.mapview">
     <div class="row">
       <div class="col-sm-12">
-        <table class="rwd-table">
-          <tbody class="list-table" id="list-events">
-<!--             <tr class="event-list-header">
+
+
+        <table class="table-big">
+            <tr>
               <th>Rider</th>
               <th>Date</th>
               <th>Trick</th>
               <th>Discipline</th>
               <th>Location</th>
-            </tr> -->
-            <tr ng-repeat="event in data.filteredMarkers">
-              <td>Rider: {{event.Name}}</td>
-              <td>Date: {{event.Date}}</td>
-              <td>Trick: {{event.Trick}}</td>
-              <td>Discipline: {{event.Discipline}}</td>
-              <td>Location: {{event.City + ', ' + event.Country}}</td>
             </tr>
-          </tbody>
+            <tr ng-repeat="event in data.filteredMarkers" ng-click="openEventDetails(event)">
+              <td data-th="Rider">{{event.Name}}</td>
+              <td data-th="Date">{{event.Date}}</td>
+              <td data-th="Trick">{{event.Trick}}</td>
+              <td data-th="Discipline">{{event.Discipline}}</td>
+              <td data-th="Location">{{event.City + ', ' + event.Country}}</td>
+            </tr>
         </table>
+
+
       </div>
     </div>
   </div>
   <div id="map-container" ng-show="data.mapview">
     <h1 class="error" ng-if="map_error">Map failed to load. Please use the list view.</h1>
-    <div class="map-nav-tools">
-      <span class="fa-stack fa-lg ">
-        <a href="#">
-        <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i></a>
-      </span>
-      <br>
-      <span class="fa-stack fa-lg">
-        <a href="#">
-        <i class="fa fa-search-minus fa-stack-1x fa-inverse"></i></a>
-      </span>
-      <br />
-    </div>
-    <div id="map-nav-expand">
-      <span class="fa-stack fa-lg ">
-        <a href="#">
-        <i class="fa fa-expand fa-stack-1x fa-inverse"></i></a>
-      </span>
-      <br />
-    </div>
     <ui-gmap-google-map class="main-map" center='map.center' zoom='map.zoom' options="map.options" bounds="map.bounds" control="map.control" pan="'true'">
       <!-- <ui-gmap-markers models="data.filteredMarkers" idKey="'$id'" coords="'coords'" click="clickedMarker" icon="'imgpath'"></ui-gmap-markers> -->
       <ui-gmap-markers models="data.filteredMarkers" idKey="'$id'" coords="'coords'" click="clickedMarker"></ui-gmap-markers>

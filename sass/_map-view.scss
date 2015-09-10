@@ -12,12 +12,18 @@
   margin-left: auto;
   margin-right: auto;
  // box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc, 5px 5px 0px 0px #ccc;
-  margin-bottom: 200px;
+  margin-bottom: 100px;
   border: 2px solid #ddd;
   margin-top: 10px;
   border-radius: 3px;
-  @media (max-width: 767px) {
+  @media (max-width: 950px) {
     max-width: 90%;
+  }
+  @media (max-width: 600px) {
+    max-width: 100%;
+    border: none;
+    border-top: 2px solid #ddd;
+    border-radius: 0px;
   }
 }
 
