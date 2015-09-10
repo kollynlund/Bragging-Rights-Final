@@ -1,7 +1,10 @@
 /*________LIST VIEW___________________*/
 .table-big {
-  border: 6px solid #eee;
-  font-family: 'Roboto Slab', sans-serif; }
+  border: 2px solid #eee;
+  border-radius: 4px;
+  font-family: 'Roboto Slab', sans-serif;
+  background: #333;
+  color: #fff; }
 
 #list {
   width: 77%;
@@ -9,7 +12,11 @@
 
 th {
   font-size: 1.5em;
-  color: #FFCB27; }
+  color: #FFCB27;
+  padding: 1em; }
+
+.table-big-data td {
+  padding: .5em; }
 
 .event-list-item {
   cursor: pointer; }
@@ -30,12 +37,6 @@ th {
 
 .table-big td:last-child {
   padding-bottom: .5em; }
-
-.table-big {
-  background: #333;
-  color: #fff;
-  border-radius: .4em;
-  overflow: hidden; }
 
 .table-big tr {
   border-color: #eee; }

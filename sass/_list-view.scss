@@ -4,8 +4,11 @@
 
 
 .table-big {
-  border: 6px solid #eee;
+  border: 2px solid #eee;
+  border-radius: 4px;
   font-family: 'Roboto Slab', sans-serif; 
+  background: #333;
+  color: #fff;
 }
 
 #list {
@@ -16,6 +19,12 @@
 th {
   font-size: 1.5em;
   color: #FFCB27;
+  padding: 1em;
+}
+
+.table-big-data td {
+  padding: .5em;
+
 }
 
 .event-list-item {
@@ -30,6 +39,7 @@ th {
   margin: 1em 0;
   min-width: 100%;
 }
+
 .table-big tr {
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
@@ -40,18 +50,7 @@ th {
 .table-big td:last-child {
   padding-bottom: .5em;
 }
-// .rwd-table td:before {
-//   content: attr(data-th) ": ";
-//   font-weight: bold;
-//   width: 6.5em;    
-//   display: inline-block;
-// }
-.table-big {
-  background: #333;
-  color: #fff;
-  border-radius: .4em;
-  overflow: hidden;
-}
+
 .table-big tr {
   border-color: #eee;
 }
