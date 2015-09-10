@@ -127,11 +127,11 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	});
 	// Watch for window resize events
 	$scope.$watch(function(){
-       return $window.innerWidth;
-    }, function(value) {
-    	console.log('watching');
-       $scope.windowWidth = value;
-   });
+			 return $window.innerWidth;
+		}, function(value) {
+			console.log('watching');
+			 $scope.windowWidth = value;
+	 });
 
 	$scope.openAddEvent = function () {
 		console.log('that thing did happen');
@@ -201,6 +201,20 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 })
 .factory('_',function(){
 	return _;
+})
+
+.directive('watchResize', function($window) {
+	return function($scope) {
+		$scope.initializeWindowSize = function() {
+			$scope.windowHeight = $window.innerHeight;
+			return $scope.windowWidth = $window.innerWidth;
+		};
+		$scope.initializeWindowSize();
+		return angular.element($window).bind('resize', function() {
+			$scope.initializeWindowSize();
+			return $scope.$apply();
+		});
+	};
 })
 
 /*
