@@ -1,100 +1,92 @@
-<!-- * * ADD EVENT MODAL * * -->
-<!-- TANNER CHANGED BELOW: For whatever reason, ui-bootstrap doesn't like your modal and fade classes... I changed things up a bit and it seemed to work... Definitely check on it. -->
-<!-- <div class="modal fade add-worlds-first-modal" role="dialog"> -->
-<div class="add-worlds-first-modal" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header modal-header-add-event">
-				<button type="button" class="close" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
 
-				<h4 class="modal-title add-event-header-title" id="ModalLabel">Add an achievement</h4>
-			</div> <!-- Closes header -->
+<div class="modal-header modal-header-add-event">
+	<button type="button" class="close" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
 
-			<div class="add-event-form">
-				<div class="form-group add-event-modal-main-form-group">
-				<div class="input-group-container">
-					<h4>Achievement Info</h4>
-					<div class="input-group input-add-event-group">
-						<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
-						<input type="text" class="form-control input-name" name="name-input" placeholder="Enter the full name of the person who achieved greatness" ng-model="fields.Name">
-					</div> <!-- Closes input-name -->							 
+	<h4 class="modal-title add-event-header-title" id="ModalLabel">Add an achievement</h4>
+</div> <!-- Closes header -->
 
-					<div class="input-group input-add-event-group">
-						<div class="input-group-addon"><i class="fa fa-star add-event-icon"></i></div>
-						<input type="text" class="form-control input-trick" placeholder="Enter a description of what they did" name="trick-input"ng-model="fields.Trick">
-					</div> <!-- Closes input-trick -->
+<div class="add-event-form">
+	<div class="form-group add-event-modal-main-form-group">
+	<div class="input-group-container">
+		<h4>Achievement Info</h4>
+		<div class="input-group input-add-event-group">
+			<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+			<input type="text" class="form-control input-name" name="name-input" placeholder="Enter the full name of the person who achieved greatness" ng-model="fields.Name">
+		</div> <!-- Closes input-name -->							 
 
-					<div class="input-group input-add-event-group">
-						<div class="input-group-addon"><i class="fa fa-calendar add-event-icon"></i></div>
-						<input type="date" class="form-control" datepicker-popup ng-model="fields.Date" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" />
-					</div> <!-- Closes input-date -->	 
+		<div class="input-group input-add-event-group">
+			<div class="input-group-addon"><i class="fa fa-star add-event-icon"></i></div>
+			<input type="text" class="form-control input-trick" placeholder="Enter a description of what they did" name="trick-input"ng-model="fields.Trick">
+		</div> <!-- Closes input-trick -->
 
-					<div class="input-group input-add-event-group">
-						<div class="input-group-addon"><i class="fa fa-magic add-event-icon"></i></div>
-						<select class="form-control input-discipline" name="discipline-input" ng-options="discipline for discipline in disciplines" ng-model="fields.Discipline"></select>
-						<!-- <button ng-click="showSample()" prevent-default>Log Sample</button> -->
-					</div> <!-- Closes input-discipline --> 
+		<div class="input-group input-add-event-group">
+			<div class="input-group-addon"><i class="fa fa-calendar add-event-icon"></i></div>
+			<input type="date" class="form-control" datepicker-popup ng-model="fields.Date" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" />
+		</div> <!-- Closes input-date -->	 
 
-					<div class="form-group">
-						<div class="input-group-addon">Details <i class="fa fa-info-circle add-event-icon"></i></div>
-						<textarea class="form-control input-details" id="input-details" placeholder="Additional details about the achievment" name="details-input" ng-model="fields['Additional Information']"></textarea>
-					</div> <!-- Closes input-details -->
-				</div> <!-- Closes basic trick info -->
+		<div class="input-group input-add-event-group">
+			<div class="input-group-addon"><i class="fa fa-magic add-event-icon"></i></div>
+			<select class="form-control input-discipline" name="discipline-input" ng-options="discipline for discipline in disciplines" ng-model="fields.Discipline"></select>
+			<!-- <button ng-click="showSample()" prevent-default>Log Sample</button> -->
+		</div> <!-- Closes input-discipline --> 
 
-				<div class="input-group-container">
-					<h4 style="display:block">Location of achievement</h4>
+		<div class="form-group">
+			<div class="input-group-addon">Details <i class="fa fa-info-circle add-event-icon"></i></div>
+			<textarea class="form-control input-details" id="input-details" placeholder="Additional details about the achievment" name="details-input" ng-model="fields['Additional Information']"></textarea>
+		</div> <!-- Closes input-details -->
+	</div> <!-- Closes basic trick info -->
 
-					<button class="btn btn-default" ng-class="{'btn-toggle-active': !mapview}" id="add-location-list-btn" type="button" ng-click="mapview = false">Enter Lat/Long <span class="glyphicon glyphicon-list-alt list-icon-btn"></span></button>	
+	<div class="input-group-container">
+		<h4 style="display:block">Location of achievement</h4>
 
-					<button class="btn btn-default" id="add-location-map-btn" ng-class="{'btn-toggle-active': mapview}" type="button" ng-click="mapview = true">Find on Map <span class="glyphicon glyphicon-globe globe-icon-btn"></span></button>
+		<button class="btn btn-default" ng-class="{'btn-toggle-active': !mapview}" id="add-location-list-btn" type="button" ng-click="mapview = false">Enter Lat/Long <span class="glyphicon glyphicon-list-alt list-icon-btn"></span></button>	
 
-					<div ng-if="!mapview">
-						<div class="input-group input-add-event-group">
-							<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
-							<input type="text" class="form-control input-name" placeholder="Enter city" ng-model="fields.City">
-						</div> <!-- Closes input-name -->	
+		<button class="btn btn-default" id="add-location-map-btn" ng-class="{'btn-toggle-active': mapview}" type="button" ng-click="mapview = true">Find on Map <span class="glyphicon glyphicon-globe globe-icon-btn"></span></button>
 
-						<div class="input-group input-add-event-group">
-							<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
-							<input type="text" class="form-control input-name" placeholder="Enter country" ng-model="fields.Country">
-						</div> <!-- Closes input-name -->	
+		<div ng-if="!mapview">
+			<div class="input-group input-add-event-group">
+				<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+				<input type="text" class="form-control input-name" placeholder="Enter city" ng-model="fields.City">
+			</div> <!-- Closes input-name -->	
 
-						<div class="input-group input-add-event-group">
-							<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
-							<input type="number" class="form-control input-name" placeholder="Enter latitude" ng-model="fields.Latitude">
-						</div> <!-- Closes input-name -->							 
+			<div class="input-group input-add-event-group">
+				<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+				<input type="text" class="form-control input-name" placeholder="Enter country" ng-model="fields.Country">
+			</div> <!-- Closes input-name -->	
 
-						<div class="input-group input-add-event-group">
-							<div class="input-group-addon"><i class="fa fa-star add-event-icon"></i></div>
-							<input type="number" class="form-control input-trick" placeholder="Enter longitude" ng-model="fields.Longitude">
-						</div> <!-- Closes input-trick -->
-					</div>
+			<div class="input-group input-add-event-group">
+				<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
+				<input type="number" class="form-control input-name" placeholder="Enter latitude" ng-model="fields.Latitude">
+			</div> <!-- Closes input-name -->							 
 
-					<ui-gmap-google-map class="add-event-map" center='map.center' zoom='map.zoom' options="map.options" ng-if="mapview"></ui-gmap-google-map>
-				</div> <!-- Closes location-info -->	 
+			<div class="input-group input-add-event-group">
+				<div class="input-group-addon"><i class="fa fa-star add-event-icon"></i></div>
+				<input type="number" class="form-control input-trick" placeholder="Enter longitude" ng-model="fields.Longitude">
+			</div> <!-- Closes input-trick -->
+		</div>
 
-				<div class="input-group-container">
-					<h4>Media</h4>	 
-					<div class="input-group input-add-event-group">
-						<div class="input-group-addon"><i class="fa fa-video-camera add-event-icon"></i></div>
-						<input type="text" class="form-control input-video" ng-model="fields.Video" placeholder="Copy and paste link to YouTube or Vimeo video" name="video-input">
-					</div> <!-- Closes input-group -->
-				</div> <!-- Closes media-info -->
+		<ui-gmap-google-map class="add-event-map" center='map.center' zoom='map.zoom' options="map.options" ng-if="mapview"></ui-gmap-google-map>
+	</div> <!-- Closes location-info -->	 
 
-				<div class="input-group-container">
-					<div class="form-group email-input-group">
-						<i class="fa fa-exclamation email-icon"></i><label id="email-label"> Add your email address to recieve notifications of new achievements.</label>
-						<input type="email" class="form-control input-email" id="input-email" placeholder="Enter email" name="email-input">
-					</div> <!-- Closes email form-group -->
-				</div>
-				
-				<button type="submit" class="btn add-event-submit-button" ng-click="submit()">Submit</button>
+	<div class="input-group-container">
+		<h4>Media</h4>	 
+		<div class="input-group input-add-event-group">
+			<div class="input-group-addon"><i class="fa fa-video-camera add-event-icon"></i></div>
+			<input type="text" class="form-control input-video" ng-model="fields.Video" placeholder="Copy and paste link to YouTube or Vimeo video" name="video-input">
+		</div> <!-- Closes input-group -->
+	</div> <!-- Closes media-info -->
 
-				<input class="input-lat" type="text" name="lat" hidden>
-				<input class="input-long" type="text" name="long" hidden>
+	<div class="input-group-container">
+		<div class="form-group email-input-group">
+			<i class="fa fa-exclamation email-icon"></i><label id="email-label"> Add your email address to recieve notifications of new achievements.</label>
+			<input type="email" class="form-control input-email" id="input-email" placeholder="Enter email" name="email-input">
+		</div> <!-- Closes email form-group -->
+	</div>
+	
+	<button type="submit" class="btn add-event-submit-button" ng-click="submit()">Submit</button>
 
-				</div> <!-- Closes form-group -->
-			</div> <!-- Closes form -->
-		</div> <!-- Closes modal-content -->
-	</div> <!-- Closes modal-dialog -->
-</div> <!-- Closes modal -->
+	<input class="input-lat" type="text" name="lat" hidden>
+	<input class="input-long" type="text" name="long" hidden>
+
+	</div> <!-- Closes form-group -->
+</div> <!-- Closes form -->
