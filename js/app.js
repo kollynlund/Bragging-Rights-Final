@@ -129,6 +129,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	$scope.$watch(function(){
        return $window.innerWidth;
     }, function(value) {
+    	console.log('watching');
        $scope.windowWidth = value;
    });
 
