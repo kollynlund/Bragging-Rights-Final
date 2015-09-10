@@ -42,7 +42,9 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 .controller('mainController', function($scope, $filter, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
 	$scope.data = {};
 	$scope.data.firebase_events = FirebaseData.allEventsArray;
+	$scope.map_error = true;
 	uiGmapGoogleMapApi.then(function(maps) {
+		$scope.map_error = false;
 		$scope.data.mapview = true;
 		$scope.map = { 
 			center: { latitude: 0, longitude: 0 }, 
