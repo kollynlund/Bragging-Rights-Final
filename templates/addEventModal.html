@@ -39,33 +39,15 @@
 	<div class="input-group-container">
 		<h4 style="display:block">Location of achievement</h4>
 
-		<button class="btn btn-default" ng-class="{'btn-toggle-active': !mapview}" id="add-location-list-btn" type="button" ng-click="mapview = false">Enter Lat/Long <span class="glyphicon glyphicon-list-alt list-icon-btn"></span></button>	
-
-		<button class="btn btn-default" id="add-location-map-btn" ng-class="{'btn-toggle-active': mapview}" type="button" ng-click="mapview = true">Find on Map <span class="glyphicon glyphicon-globe globe-icon-btn"></span></button>
-
-		<div ng-if="!mapview">
-			<div class="input-group input-add-event-group">
-				<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
-				<input type="text" class="form-control input-name" placeholder="Enter city" ng-model="fields.City">
-			</div> <!-- Closes input-name -->	
-
-			<div class="input-group input-add-event-group">
-				<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
-				<input type="text" class="form-control input-name" placeholder="Enter country" ng-model="fields.Country">
-			</div> <!-- Closes input-name -->	
-
-			<div class="input-group input-add-event-group">
-				<div class="input-group-addon"><i class="fa fa-user add-event-icon"></i></div>
-				<input type="number" class="form-control input-name" placeholder="Enter latitude" ng-model="fields.Latitude">
-			</div> <!-- Closes input-name -->							 
-
-			<div class="input-group input-add-event-group">
-				<div class="input-group-addon"><i class="fa fa-star add-event-icon"></i></div>
-				<input type="number" class="form-control input-trick" placeholder="Enter longitude" ng-model="fields.Longitude">
-			</div> <!-- Closes input-trick -->
+		<div class="row" ng-if="fields.Country">
+			<div class="text-center" ng-class="{'col-xs-4': (fields.State && fields.City), 'col-xs-6': (fields.State && !fields.City), 'col-xs-12': (!fields.State && !fields.City)}"><h5>Country: {{fields.Country}}</h5></div>
+			<div class="text-center" ng-class="{'col-xs-4': (fields.City), 'col-xs-6': (!fields.City)}" ng-if="fields.State"><h5>State: {{fields.State}}</h5></div>
+			<div class="text-center" class="col-xs-4" ng-if="fields.City"><h5>City: {{fields.City}}</h5></div>
 		</div>
 
-		<ui-gmap-google-map class="add-event-map" center='map.center' zoom='map.zoom' options="map.options" ng-if="mapview"></ui-gmap-google-map>
+		<ui-gmap-google-map class="add-event-map" center='map.center' zoom='map.zoom' options="map.options" bounds="map.bounds" control="map.control" events="map.events" ng-if="mapview">
+			<ui-gmap-markers models="map.placed_marker" idKey="'id'" coords="'coords'"></ui-gmap-markers>
+		</ui-gmap-google-map>
 	</div> <!-- Closes location-info -->	 
 
 	<div class="input-group-container">

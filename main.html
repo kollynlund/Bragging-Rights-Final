@@ -76,7 +76,7 @@
   </div>
   <div id="map-container" ng-if="data.mapview">
     <h1 class="error" ng-if="map_error">Map failed to load. Please use the list view.</h1>
-    <ui-gmap-google-map class="main-map" center='map.center' zoom='map.zoom' options="map.options" bounds="map.bounds" control="map.control" pan="'true'">
+    <ui-gmap-google-map class="main-map" center='map.center' zoom='map.zoom' options="map.options" bounds="map.bounds" control="map.control">
       <!-- <ui-gmap-markers models="data.filteredMarkers" idKey="'$id'" coords="'coords'" click="clickedMarker" icon="'imgpath'"></ui-gmap-markers> -->
       <ui-gmap-markers models="data.filteredMarkers" idKey="'$id'" coords="'coords'" click="clickedMarker"></ui-gmap-markers>
     </ui-gmap-google-map>

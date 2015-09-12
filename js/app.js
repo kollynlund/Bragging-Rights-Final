@@ -54,68 +54,30 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 				mapTypeId: maps.MapTypeId.SATELLITE,
 				minZoom: 2
 			},
-			bounds: {northeast:{latitude:90,longitude:-180},southwest:{latitude:-90,longitude:180}},
 			control: {}
 		};
 
-		uiGmapIsReady.promise().then(function(map) {
+		uiGmapIsReady.promise(1).then(function(map) {
+			// Setting up control to keep map in bounds vertically
 			$scope.data.map_control = $scope.map.control.getGMap();
-			console.log('projection:',$scope.data.map_control.getProjection().fromPointToLatLng(10,10));
-			function createBounds(centermax) {
-				return new maps.LatLngBounds(new maps.LatLng(-centermax,-180), new maps.LatLng(centermax,180));
-			};
-			// var allowedBoundsArray = {
-			// 	'2': createBounds(63.6771078),
-			// 	'3': createBounds(63.6771078),
-			// 	'4': createBounds(63.6771078),
-			// 	'5': createBounds(63.6771078),
-			// 	'6': createBounds(63.6771078),
-			// 	'7': createBounds(63.6771078),
-			// 	'8': createBounds(63.6771078),
-			// 	'9': createBounds(63.6771078),
-			// 	'10': createBounds(63.6771078),
-			// 	'11': createBounds(63.6771078),
-			// 	'12': createBounds(63.6771078),
-			// 	'13': createBounds(63.6771078),
-			// 	'14': createBounds(63.6771078),
-			// 	'15': createBounds(63.6771078),
-			// 	'16': createBounds(63.6771078),
-			// 	'17': createBounds(63.6771078),
-			// 	'18': createBounds(63.6771078),
-			// 	'19': createBounds(63.6771078),
-			// 	'20': createBounds(63.6771078),
-			// 	'21': createBounds(63.6771078),
-			// };
-
-
-			maps.event.addListener($scope.data.map_control,'center_changed',function() { checkBounds(); });
-			var allowedBounds = new maps.LatLngBounds(
-				new maps.LatLng(-73.6102172, -180), 
-				new maps.LatLng(67, 180)
-			);
+			maps.event.addListener($scope.data.map_control,'center_changed',function() { 
+				checkBounds(); 
+			});
 			function checkBounds() {
+				var projection = $scope.data.map_control.getProjection();
+				var bounds = $scope.data.map_control.getBounds();
+				var center = projection.fromLatLngToPoint($scope.data.map_control.getCenter());
+				var sw = projection.fromLatLngToPoint(bounds.getSouthWest());
+				var ne = projection.fromLatLngToPoint(bounds.getNorthEast());
+				var spread = sw.y - ne.y;
 
-				if(! allowedBounds.contains($scope.data.map_control.getCenter())) {
-					var C = $scope.data.map_control.getCenter();
-					var X = C.lng();
-					var Y = C.lat();
-
-					var AmaxX = allowedBounds.getNorthEast().lng();
-					var AmaxY = allowedBounds.getNorthEast().lat();
-					var AminX = allowedBounds.getSouthWest().lng();
-					var AminY = allowedBounds.getSouthWest().lat();
-
-					if (X < AminX) {X = AminX;}
-					if (X > AmaxX) {X = AmaxX;}
-					if (Y < AminY) {Y = AminY;}
-					if (Y > AmaxY) {Y = AmaxY;}
-
-					// $scope.data.map_control.setCenter(new maps.LatLng(Y,X));
+				if (ne.y < 0) {
+					$scope.data.map_control.setCenter(projection.fromPointToLatLng(new maps.Point(center.x, Math.ceil(spread / 2))));					
+				} else if (sw.y > 257) {
+					$scope.data.map_control.setCenter(projection.fromPointToLatLng(new maps.Point(center.x, 256 - Math.floor(spread / 2))));					
 				}
-			}
-
-
-		})
+			};
+		});
 	});
 
 	// Watch for changes in the search text and the event array
@@ -132,13 +94,12 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		   $scope.windowWidth = $window.innerWidth;
 		});
 	});
-
 	$scope.$on("$destroy",function (){
-		 $(window).off("resize.doResize"); //remove the handler added earlier
+		 $(window).off("resize.doResize");
 	});
+	// -------------------------------------
 
 	$scope.openAddEvent = function () {
-		console.log('that thing did happen');
 		var modalInstance = $modal.open({
 			animation: true,
 			templateUrl: 'templates/addEventModal.html',
@@ -204,23 +165,87 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	}
 })
 .factory('_',function(){
+	// Returns lodash
 	return _;
 })
 
 /*
 -------- MODAL CONTROLLERS --------
 */
-.controller('addEventModalInstanceController', function($scope, $modalInstance, uiGmapGoogleMapApi, FirebaseData) {
+.controller('addEventModalInstanceController', function($scope, $http, $modalInstance, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData) {
 	uiGmapGoogleMapApi.then(function(maps) {
-		$scope.mapview = false;
+		$scope.mapview = true;
 		$scope.map = { 
 			center: { latitude: 0, longitude: 0 }, 
 			zoom: 2, 
 			options:{
 				mapTypeId: maps.MapTypeId.SATELLITE,
 				minZoom: 2
-			} 
+			},
+			control: {},
+			events: {
+				click: function(map, eventName, originalEventArgs) {
+					var e = originalEventArgs[0];
+					var lat = e.latLng.lat(),lon = e.latLng.lng();
+					var marker = {
+						id: Date.now(),
+						coords: {
+							latitude: lat,
+							longitude: lon
+						}
+					};
+					$scope.map.placed_marker = [marker];
+					$scope.fields.coords = marker.coords;
+
+					// Reverse geocoding of selected lat/long point
+					$http.get('http://open.mapquestapi.com/nominatim/v1/reverse.php?format=json&lat='+String(marker.coords.latitude)+'&lon='+String(marker.coords.longitude)+'&zoom=18&addressdetails=1').then(function(data) {
+						var BAO = data.data.address || {country:'(No country data available)'};
+						$scope.fields.Country = BAO.country;
+						$scope.fields.State = BAO.state || null;
+						$scope.fields.City = (
+							BAO.suburb ? BAO.suburb : (
+								BAO.village ? BAO.village : (
+									BAO.hamlet ? BAO.hamlet : (
+										BAO.town ? BAO.town : (
+											BAO.city ? BAO.city : (
+												BAO.county ? BAO.county : (
+													BAO.state_district ? BAO.state_district : null
+												)
+											)
+										)
+									)
+								)
+							)
+						);
+					});
+
+					$scope.$apply();
+				}
+			},
+			placed_marker:[]
 		};
+
+		uiGmapIsReady.promise(2).then(function(map) {
+			// Setting up control to keep map in bounds vertically
+			$scope.map_control = $scope.map.control.getGMap();
+			maps.event.addListener($scope.map_control,'center_changed',function() { 
+				checkBounds(); 
+			});
+			function checkBounds() {
+				var projection = $scope.map_control.getProjection();
+				var bounds = $scope.map_control.getBounds();
+				var center = projection.fromLatLngToPoint($scope.map_control.getCenter());
+				var sw = projection.fromLatLngToPoint(bounds.getSouthWest());
+				var ne = projection.fromLatLngToPoint(bounds.getNorthEast());
+				var spread = sw.y - ne.y;
+
+				if (ne.y < 0) {
+					$scope.map_control.setCenter(projection.fromPointToLatLng(new maps.Point(center.x, Math.ceil(spread / 2))));					
+				} else if (sw.y > 255) {
+					$scope.map_control.setCenter(projection.fromPointToLatLng(new maps.Point(center.x, 254 - Math.floor(spread / 2))));					
+				}
+			};
+		});
 	});
 	$scope.disciplines = ['MOTO','MTB','SK8','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
 	$scope.fields = {};
@@ -245,6 +270,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	// -------------------------------
 
 	$scope.cancel = function () {
+		// Cancels modal window
 		$modalInstance.dismiss('cancel');
 	};
 	$scope.submit = function() {
