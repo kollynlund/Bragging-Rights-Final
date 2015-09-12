@@ -153,6 +153,36 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 -------- MODAL CONTROLLERS --------
 */
 .controller('addEventModalInstanceController', function($scope, $http, $modalInstance, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData) {
+	// Video link matching utilities
+	function matchYoutubeUrl(url) {
+		var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+		return [(url.match(p)) ? true : false, (url.match(p)) ? RegExp.$1 : false]
+	};
+	function matchVimeoUrl(url) {
+		var p = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
+		return [(url.match(p)) ? true : false, (url.match(p)) ? RegExp.$3 : false]
+	};
+
+	$scope.disciplines = ['MOTO','MTB','SK8','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
+	$scope.fields = {};
+	$scope.submit_tried = false;
+	$scope.valid_event = false;
+	// Configuration for the datepicker
+	$scope.fields.Date = new Date();
+	$scope.minDate = new Date(1000,1,1)
+	$scope.maxDate = new Date();
+	$scope.status = {
+		opened: false
+	};
+	$scope.dateOptions = {
+		formatYear: 'yy',
+		startingDay: 1
+	};
+	$scope.open = function($event) {
+		$scope.status.opened = true;
+	};
+	// -------------------------------
+
 	uiGmapGoogleMapApi.then(function(maps) {
 		$scope.mapview = true;
 		$scope.map = { 
@@ -227,55 +257,49 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 			};
 		});
 	});
-	$scope.disciplines = ['MOTO','MTB','SK8','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
-	$scope.fields = {};
-
-	// Configuration for the datepicker
-	$scope.today = function() {
-		return new Date();
-	};
-	$scope.fields.Date = $scope.today();
-	$scope.minDate = new Date(1000,1,1)
-	$scope.maxDate = $scope.today();
-	$scope.status = {
-		opened: false
-	};
-	$scope.dateOptions = {
-		formatYear: 'yy',
-		startingDay: 1
-	};
-	$scope.open = function($event) {
-		$scope.status.opened = true;
-	};
-	// -------------------------------
 
 	$scope.cancel = function () {
 		// Cancels modal window
 		$modalInstance.dismiss('cancel');
 	};
+	
 	$scope.submit = function() {
+		var verifyEvent = function(fields) {
+			var name_valid = (fields.Name ? fields.Name.trim().length : 0) > 1;
+			var trick_valid = (fields.Trick ? fields.Trick.trim().length : 0) > 1;
+			var date_valid = fields.Date.getTime() <= new Date().getTime();
+			var discipline_valid = fields.Discipline != '' && fields.Discipline != '-- Select a discipline --';
+			var details_valid = true;
+			var location_valid = (fields.coords.latitude ? true : false) && (fields.coords.longitude ? true : false) && (fields.Country ? true : false);
+			var media_valid = (fields.Video ? matchYoutubeUrl(fields.Video)[0] : true) || (fields.Video ? matchVimeoUrl(fields.Video)[0] : true);
+			var email_valid = true;
 
-		// Do event verification here and set scope variables corresponding to error behavior
-		var verifyEvent = function(the_new_event) {
-			return true;
+			$scope.valid_event = name_valid && trick_valid && date_valid && discipline_valid && details_valid && location_valid && media_valid && email_valid; 
+			return $scope.valid_event;
 		};
 
+		// TODO: Change this flow so that the dates are stored in Firebase as JavaScript date objects and we can display them using toLocaleDateString on the client side
 		var newEvent = {
 			'Additional Information':$scope.fields['Additional Information'] || null,
 			'City':$scope.fields.City || null,
 			'Country':$scope.fields.Country || null,
 			'Date':$scope.fields.Date || null,
 			'Discipline':$scope.fields.Discipline || null,
-			'Name':$scope.fields.Name || null,
+			'Name':$scope.fields.Name ? $scope.fields.Name.trim() : null,
 			'Trick':$scope.fields.Trick || null,
 			'Video':$scope.fields.Video || null,
-			'coords':{latitude:$scope.fields.Latitude, longitude:$scope.fields.Longitude} || null,
+			'coords':$scope.fields.coords || null,
 			'imgpath':($scope.fields.Discipline ? '../img/icon_pngs/'+$scope.fields.Discipline.toLowerCase()+'.png' : null)
 		};
+		
 		if (verifyEvent(newEvent)) {
-			FirebaseData.pushEventToFirebase(newEvent);
+			var submittableEvent = _.set(newEvent,'Date',$scope.fields.Date.toLocaleDateString());
+			FirebaseData.pushEventToFirebase(submittableEvent);
 			$modalInstance.close();	
 		}
+		else {
+			$scope.submit_tried = true;
+		};
 	};
 })
 .controller('eventDetailsModalInstanceController', function($scope, $modalInstance, $state, $stateParams, the_event) {
@@ -329,3 +353,8 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	// Returns lodash
 	return _;
 })
+
+
+
+// TODO: Make Firebase New Events be Events instead (it's just cleaner feeling)
+// TODO: Fix the date locale issue
