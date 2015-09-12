@@ -1,4 +1,3 @@
-// Defining the app and dependencies
 angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps', 'firebase', 'anguvideo'])
 
 
@@ -38,12 +37,16 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		$state.go('main');
 	}
 })
-
 .controller('mainController', function($scope, $window, $filter, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
 	$scope.windowWidth = $window.innerWidth;
-	$scope.data = {};
-	$scope.data.firebase_events = FirebaseData.allEventsArray;
 	$scope.map_error = true;
+	$scope.disciplines = ['MOTO','MTB','SK8','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
+	$scope.selected_discipline = '';
+	$scope.data = {
+		firebase_events: FirebaseData.allEventsArray,
+		eligible_events: FirebaseData.allEventsArray,
+	};
+	
 	uiGmapGoogleMapApi.then(function(maps) {
 		$scope.map_error = false;
 		$scope.data.mapview = true;
@@ -81,7 +84,11 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	});
 
 	// Watch for changes in the search text and the event array
-	$scope.$watchGroup(['data.searchbar_text','data.firebase_events'],function(newValues, oldValues) {
+	$scope.$watch('data.firebase_events',function(newValue, oldValue) {
+		// Keep eligible events in sync if new data comes from Firebase
+		$scope.eligible_events = newValue.filter(function(item){return item.Discipline === $scope.selected_discipline});
+	});
+	$scope.$watchGroup(['data.searchbar_text','data.eligible_events'],function(newValues, oldValues) {
 		$scope.data.filteredMarkers = $filter("filter")(newValues[1], newValues[0]);
 
 		if (!$scope.data.filteredMarkers) {
@@ -95,6 +102,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		});
 	});
 	$scope.$on("$destroy",function (){
+		// Kill resize listener
 		 $(window).off("resize.doResize");
 	});
 	// -------------------------------------
@@ -121,53 +129,25 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		});
 	};
 	$scope.clickedMarker = function(a,b,c) {
+		// Open details modal
 		$scope.openEventDetails(c);
 	};
+	$scope.selectDiscipline = function(discipline) {
+		if (discipline) {
+			$scope.data.eligible_events = $scope.data.firebase_events.filter(function(item){return item.Discipline === discipline});
+			$scope.selected_discipline = discipline;
+		}
+		else {
+			$scope.data.eligible_events = $scope.data.firebase_events;
+			$scope.selected_discipline = '';
+		}
+	}
 	$scope.toggleView = function(mapview) {
+		// Map view or list view
 		$scope.data.mapview = mapview;
 	};
 })
 
-
-.factory('FirebaseData', function($firebaseArray, $firebaseObject) {
-	var rootRef = new Firebase('https://braggingrights.firebaseio.com/New Events');
-	var rootObj = new $firebaseArray(rootRef);
-
-	var realRootRef = new Firebase('https://braggingrights.firebaseio.com/Test Events');
-	var realRootObj = new $firebaseArray(realRootRef);
-
-	return {
-		pushEventToFirebase: function(object) {
-			rootObj.$add(object);
-		},
-		pushEventToFirebaseTest: function(object) {
-			realRootObj.$add(object);
-		},
-		getAllEventsArray: function() {
-			return rootObj.$loaded().then(function(){
-				return rootObj.$value;
-			})
-		},
-		// writeNewEvents: function() {
-		// 	 return rootObj.$loaded().then(function(){
-		// 		 console.log('dumbdumb');
-		// 		 realRootObj['New Events'] = rootObj.map(function(item) {
-		// 			 var pre = _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
-		// 			 pre.imgpath = item.Discipline ? '../img/icon_pngs/'+item.Discipline.toLowerCase()+'.png' : '';
-		// 			 return pre;
-		// 			 // return _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
-		// 		 });
-		// 		 realRootObj.$save();
-		// 	 });
-		// },
-
-		allEventsArray: rootObj
-	}
-})
-.factory('_',function(){
-	// Returns lodash
-	return _;
-})
 
 /*
 -------- MODAL CONTROLLERS --------
@@ -307,8 +287,45 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 })
 
 
+/*
+-------- DATA AND UTILITIES --------
+*/
+.factory('FirebaseData', function($firebaseArray, $firebaseObject) {
+	var rootRef = new Firebase('https://braggingrights.firebaseio.com/New Events');
+	var rootObj = new $firebaseArray(rootRef);
 
+	var realRootRef = new Firebase('https://braggingrights.firebaseio.com/Test Events');
+	var realRootObj = new $firebaseArray(realRootRef);
 
+	return {
+		pushEventToFirebase: function(object) {
+			rootObj.$add(object);
+		},
+		pushEventToFirebaseTest: function(object) {
+			realRootObj.$add(object);
+		},
+		getAllEventsArray: function() {
+			return rootObj.$loaded().then(function(){
+				return rootObj.$value;
+			})
+		},
+		// writeNewEvents: function() {
+		// 	 return rootObj.$loaded().then(function(){
+		// 		 console.log('dumbdumb');
+		// 		 realRootObj['New Events'] = rootObj.map(function(item) {
+		// 			 var pre = _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
+		// 			 pre.imgpath = item.Discipline ? '../img/icon_pngs/'+item.Discipline.toLowerCase()+'.png' : '';
+		// 			 return pre;
+		// 			 // return _.omit(_.set(item,'coords',{latitude:item.Latitude, longitude:item.Longitude}),['Latitude','Longitude']);
+		// 		 });
+		// 		 realRootObj.$save();
+		// 	 });
+		// },
 
-
-
+		allEventsArray: rootObj
+	}
+})
+.factory('_',function(){
+	// Returns lodash
+	return _;
+})

@@ -27,13 +27,28 @@
       </div>
     </div>
     <div class="col-sm-4">
-      <div id="filter-map" class="dropdown">
+<!--       <div id="filter-map" class="dropdown">
         <button type="button" id="sort-map-dropdown-button" class="btn dropdown-toggle sort-map-btn" data-toggle="dropdown" aria-expanded="false">
         FILTER MAP <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu text-center" role="menu" id="sort-map-list">
+        <ul class="dropdown-menu" role="menu" >
+          <li>test</li>
+          <li>test</li>
+          <li>test</li>
+        </ul>
+      </div> -->
+
+      <div id="filter-map" class="dropdown" dropdown is-open="status.isopen">
+        <button type="button" id="sort-map-dropdown-button" class="btn dropdown-toggle sort-map-btn" dropdown-toggle>
+          {{selected_discipline ? 'Filter: '+selected_discipline : 'FILTER MAP'}} <span class="caret"></span>
+        </button>
+        <ul id="sort-map-list" class="dropdown-menu text-center" role="menu" aria-labelledby="sort-map-dropdown-button">
+          <li role="menuitem" ng-repeat="discipline in disciplines"><a href="#" ng-click="selectDiscipline(discipline)">{{discipline}}</a></li>
+          <li class="divider"></li>
+          <li role="menuitem"><a href="#" ng-click="selectDiscipline()">Show all</a></li>
         </ul>
       </div>
+
     </div>
   </div>
   </div>
