@@ -1,13 +1,22 @@
 
 
-/*________EVENT MODAL________________________*/
+.page {
+  background-color: #222;
+  padding-bottom: 20em;
 
-.modal-body {
+}
+
+.details-container {
   background-color: #222;
   font-family: 'Roboto Slab', sans-serif;
-  @media (max-width: 991px) {
-    padding-top: 7.5px;
-  } 
+}
+
+.details-container {
+  max-width: 900px;
+  margin: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+
 }
 
 .modal-header {
@@ -37,14 +46,18 @@
 }
 
 .header-event-modal {
-  background-color: rgba(93, 93, 93, 0.6);
-  box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;
+  background-color: #333;
+ // box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;
   border-radius: 0px;
   margin-bottom: 20px;
-
-
-  // border: 2px solid #ddd;
-  // border-radius: 4px;
+  width: 94%;
+  margin-left: auto;
+  margin-right: auto;
+ border: 2px solid #ddd;
+ border-top: none;
+ border-radius: 4px;
+ border-top-right-radius: 0px;
+ border-top-left-radius: 0px;
 
 }
 
@@ -52,7 +65,7 @@
 
 .event-data-modal-name:before, .event-data-modal-name:after {
   content: '\2013 \2002';
-  color: #333;
+  color: #FFCB27;
   @media (max-width: 991px) {
     display: none;
   }
@@ -60,15 +73,14 @@
 
 
 .event-data-modal-name {
-  background-color: #FFCB27;
   letter-spacing: 3px;
   font-weight: 700;
-  padding: 15px;
+  padding: 10px;
   line-wrap: none;
-  color: #333;
+  color: #FFCB27;
   width: 100%;
   text-transform: uppercase;
-  font-size: 2.5em;
+  font-size: 1.75em;
   text-overflow: ellipsis;
     @media (max-width: 991px) {
     font-size: 1.75em;
@@ -127,22 +139,19 @@
 #photo-vid-container {
   background-color: rgba(93, 93, 93, 0.6);
   margin-bottom: 30px;
-  box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;  
+ // box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;  
 
-  // border: 2px solid #ddd;
-  // border-radius: 4px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
 }
 
 
 
 .event-data-modal-trick {
-  color: #BF981D;
   color: #FFCB27;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 10px;
-  margin-bottom: 40px; 
-  font-size: 1.125em;
+  font-size: 1.25em;
   width: 80%;
   padding-bottom: 10px;
   @media (max-width: 991px) {
@@ -246,19 +255,19 @@
 .event-modal-discipline, .event-modal-location, .event-modal-date, .event-modal-extra {
   background-color: rgba(93, 93, 93, .6);
   margin-bottom: 30px;
-  box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;
+ // box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;
 
 
-  // border: 2px solid #ddd;
-  // border-radius: 4px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
 }
 
 .event-video {
-   box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;
+ //  box-shadow: 1px 1px 0px 0px #ccc, 2px 2px 0px 0px #ccc, 3px 3px 0px 0px #ccc, 4px 4px 0px 0px #ccc;
 
 
-  // border: 2px solid #ddd;
-  // border-radius: 4px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
 }
 
 

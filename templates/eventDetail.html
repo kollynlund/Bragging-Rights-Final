@@ -1,14 +1,21 @@
-<div class="modal-header modal-header-event-details">
-	<button type="button" class="close" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
-</div>
-<div class="modal-body event-details-modal-data-container">
+ <div class="welcome-top row">
+    <div class="pull-left">
+      <a href="main.html"><img class="logo img-responsive" alt="logo" src="img/logocrop.png"></a>
+    </div>
+    <div class="pull-right">
+      <div class="text-secondary-container">
+        <p class="text-secondary" ng-click="doSomething()">Got something to bragg about?</p> <button id="add-achievment" ng-click="openAddEvent()">Add it here</button>
+    </div>
+ </div>
+  </div>
+<div class="page">
+<div class="details-container">
 	<div class="row text-center">
-		<div class="col-md-12">
 			<div class="header-event-modal">
 				<div class="event-data-modal-name">{{theEvent.Name}}</div>
 				<div class="event-data-modal-trick">{{theEvent.Trick}}</div>
 			</div>
-		</div>
+		<div class="details-container">
 		<div class="col-sm-9">
 			<div id="photo-vid-container">
 				<h2 class="details-left">Proof</h2>
@@ -41,6 +48,7 @@
 				<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
 				<div class="event-data-modal-date">{{theEvent.Date}}</div>
 			</div>
+		</div>
 		</div>
 	</div>
 </div>
