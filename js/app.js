@@ -4,14 +4,16 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 /*
 -------- INITIAL CONFIGURATION --------
 */
-.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {	 
+.config(function($stateProvider, $urlRouterProvider, $locationProvider, uiGmapGoogleMapApiProvider) {
+	$locationProvider.html5Mode({enabled: true});
+
 	uiGmapGoogleMapApiProvider.configure({
 		key: 'AIzaSyDEdKE2QWDOArAqz_E_8Y2Uu00qcjtL_44',
 		v: '3.20', //defaults to latest 3.X anyhow
 		libraries: 'weather,geometry,visualization'
 	});
 
-	$urlRouterProvider.otherwise('/welcome/');
+	$urlRouterProvider.otherwise('welcome/');
 
 	$stateProvider
 		.state('welcome', {
@@ -24,7 +26,13 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 			url: '/main',
 			templateUrl: 'main.html',
 			controller: 'mainController'
-		});
+		})
+
+		.state('detail', {
+			url:'/details/{event_id}',
+			templateUrl: 'templates/eventDetail.html',
+			controller: 'eventDetailController'
+		})
 })
 
 
@@ -37,7 +45,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		$state.go('main');
 	}
 })
-.controller('mainController', function($scope, $window, $filter, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
+.controller('mainController', function($scope, $window, $filter, $state, $modal, uiGmapGoogleMapApi, uiGmapIsReady, FirebaseData){
 	$scope.windowWidth = $window.innerWidth;
 	$scope.map_error = true;
 	$scope.disciplines = ['MOTO','MTB','SK8','Wakeboard','Snowboard','Ski','Surf','Snowmobile','Scooter','BMX'];
@@ -116,17 +124,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		});
 	};
 	$scope.openEventDetails = function(the_event) {
-		var modalInstance = $modal.open({
-			animation: true,
-			templateUrl: 'templates/eventDetailsModal.html',
-			controller: 'eventDetailsModalInstanceController',
-			size: 'lg',
-			resolve: {
-				the_event: function () {
-					return the_event;
-				}
-			}
-		});
+		$state.go('detail', {event_id: the_event.$id});
 	};
 	$scope.clickedMarker = function(a,b,c) {
 		// Open details modal
@@ -302,11 +300,13 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		};
 	};
 })
-.controller('eventDetailsModalInstanceController', function($scope, $modalInstance, $state, $stateParams, the_event) {
-	$scope.theEvent = the_event;
+.controller('eventDetailController', function($scope, $state, $stateParams, FirebaseData) {
+	FirebaseData.getSingleEvent($stateParams.event_id).then(function(data) {
+		$scope.theEvent = data;
+	});
 
 	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
+		$state.go('main');
 	}
 })
 
@@ -331,6 +331,12 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		getAllEventsArray: function() {
 			return rootObj.$loaded().then(function(){
 				return rootObj.$value;
+			})
+		},
+		getSingleEvent: function(event_id) {
+			var the_event = new $firebaseObject(rootRef.child(event_id));
+			return the_event.$loaded().then(function(){
+				return the_event;
 			})
 		},
 		// writeNewEvents: function() {
