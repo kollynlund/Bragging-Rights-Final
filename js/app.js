@@ -26,7 +26,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 			controller: 'mainController'
 		})
 
-		.state('/detail', {
+		.state('detail', {
 			url:'/details/{event_id}',
 			templateUrl: 'templates/eventDetail.html',
 			controller: 'eventDetailController'
