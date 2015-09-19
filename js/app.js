@@ -4,16 +4,14 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 /*
 -------- INITIAL CONFIGURATION --------
 */
-.config(function($stateProvider, $urlRouterProvider, $locationProvider, uiGmapGoogleMapApiProvider) {
-	$locationProvider.html5Mode({enabled: true});
-
+.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
 	uiGmapGoogleMapApiProvider.configure({
 		key: 'AIzaSyDEdKE2QWDOArAqz_E_8Y2Uu00qcjtL_44',
 		v: '3.20', //defaults to latest 3.X anyhow
 		libraries: 'weather,geometry,visualization'
 	});
 
-	$urlRouterProvider.otherwise('welcome/');
+	$urlRouterProvider.otherwise('/welcome/');
 
 	$stateProvider
 		.state('welcome', {
@@ -28,7 +26,7 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 			controller: 'mainController'
 		})
 
-		.state('detail', {
+		.state('/detail', {
 			url:'/details/{event_id}',
 			templateUrl: 'templates/eventDetail.html',
 			controller: 'eventDetailController'
