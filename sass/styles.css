@@ -163,6 +163,16 @@ th {
   background-color: #222;
   padding-bottom: 20em; }
 
+.back {
+  position: fixed;
+  margin-left: 2.5%;
+  margin-top: 5px;
+  font-size: 1.125em;
+  background-color: #333;
+  border: 2px solid #eee;
+  padding: 5px;
+  color: #ddd; }
+
 .details-container {
   background-color: #222;
   font-family: 'Roboto Slab', sans-serif; }
@@ -410,7 +420,10 @@ textarea.form-control {
 
 select {
   -webkit-appearance: none;
-  -webkit-border-radius: 0px; }
+  -webkit-border-radius: 0px;
+  color: #999;
+  background-color: #eee;
+  padding: 6px 34px; }
 
 .input-group-container {
   border-radius: 4px;
