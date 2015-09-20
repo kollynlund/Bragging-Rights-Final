@@ -20,7 +20,10 @@
 
 			<div class="input-group input-add-event-group">
 				<div class="input-group-addon"><i class="fa fa-calendar add-event-icon"></i></div>
-				<input type="date" class="form-control" datepicker-popup ng-model="fields.Date" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" />
+				<!-- <input type="date" class="form-control" datepicker-popup ng-model="fields.Date" is-open="status.opened" min-mode="year" datepicker-mode="month" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" /> -->
+				<select ng-model="fields.Year" ng-options="y for y in years" ng-init="fields.Year = current_year"></select>
+				<select ng-model="fields.Month" ng-options="m for m in months" ng-init="fields.Month = months[current_month]"></select>
+				<select ng-model="fields.Day" ng-options="d for d in days" ng-init="fields.Day = current_day"></select>
 			</div>
 
 			<div class="input-group input-add-event-group">

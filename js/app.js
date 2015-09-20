@@ -163,20 +163,39 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 	$scope.fields = {};
 	$scope.submit_tried = false;
 	$scope.valid_event = false;
+
+	$scope.current_date = new Date();
+	$scope.current_year = $scope.current_date.getFullYear();
+	$scope.current_month = $scope.current_date.getUTCMonth();
+	$scope.current_day = $scope.current_date.getDate();
+	$scope.years = _.range(1800, $scope.current_year+1);
+	$scope.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	$scope.month_days = [31,28,31,30,31,30,31,31,30,31,30,31];
+	$scope.days = _.range(1,$scope.month_days[$scope.current_month]+1);
+	$scope.$watchGroup(['fields.Year','fields.Month'], function(newValues, oldValues) {
+		console.log(newValues);
+		var selected_year = newValues[0];
+		var selected_month = $scope.months.indexOf(newValues[1]);
+		$scope.days = _.range(1,$scope.month_days[selected_month]+1);
+		if (selected_year % 4 === 0 && selected_month === 1) {
+			$scope.days = _.range(1,$scope.month_days[selected_month]+2);
+		}
+	})
+
 	// Configuration for the datepicker
-	$scope.fields.Date = new Date();
-	$scope.minDate = new Date(1000,1,1)
-	$scope.maxDate = new Date();
-	$scope.status = {
-		opened: false
-	};
-	$scope.dateOptions = {
-		formatYear: 'yy',
-		startingDay: 1
-	};
-	$scope.open = function($event) {
-		$scope.status.opened = true;
-	};
+	// $scope.fields.Date = new Date();
+	// $scope.minDate = new Date(1000,1,1)
+	// $scope.maxDate = new Date();
+	// $scope.status = {
+	// 	opened: false
+	// };
+	// $scope.dateOptions = {
+	// 	formatYear: 'yy',
+	// 	startingDay: 1
+	// };
+	// $scope.open = function($event) {
+	// 	$scope.status.opened = true;
+	// };
 	// -------------------------------
 
 	uiGmapGoogleMapApi.then(function(maps) {
@@ -204,7 +223,11 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 					$scope.fields.coords = marker.coords;
 
 					// Reverse geocoding of selected lat/long point
-					$http.get('http://open.mapquestapi.com/nominatim/v1/reverse.php?format=json&lat='+String(marker.coords.latitude)+'&lon='+String(marker.coords.longitude)+'&zoom=18&addressdetails=1').then(function(data) {
+					$http({
+						method:'GET',
+						url: 'http://open.mapquestapi.com/nominatim/v1/reverse.php?format=json&key=PmqvjTdXg4ikav5X37L9WwMuACDgmiNx&lat='+String(marker.coords.latitude)+'&lon='+String(marker.coords.longitude)+'&zoom=18&addressdetails=1',
+						headers: {'Access-Control-Allow-Origin':true}
+					}).then(function(data) {
 						var BAO = data.data.address || {country:'(No country data available)'};
 						$scope.fields.Country = BAO.country;
 						$scope.fields.State = BAO.state || null;
@@ -298,10 +321,19 @@ angular.module('braggingrights', ['ui.router','ui.bootstrap', 'uiGmapgoogle-maps
 		};
 	};
 })
-.controller('eventDetailController', function($scope, $state, $stateParams, FirebaseData) {
+.controller('eventDetailController', function($scope, $state, $stateParams, $modal, FirebaseData) {
 	FirebaseData.getSingleEvent($stateParams.event_id).then(function(data) {
 		$scope.theEvent = data;
 	});
+
+	$scope.openAddEvent = function () {
+		var modalInstance = $modal.open({
+			animation: true,
+			templateUrl: 'templates/addEventModal.html',
+			controller: 'addEventModalInstanceController',
+			size: 'lg'
+		});
+	};
 
 	$scope.cancel = function () {
 		$state.go('main');
