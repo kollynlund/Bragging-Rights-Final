@@ -1,4 +1,4 @@
- <div class="welcome-top row">
+<div class="welcome-top row">
     <div class="pull-left">
       <a href="#/main"><img class="logo img-responsive" alt="logo" src="img/logocrop.png"></a>
     </div>
@@ -25,8 +25,8 @@
 				<iframe ng-if="!theEvent.Video" class="embed-responsive-item event-video" src="templates/videoError.html" allowfullscreen></iframe>
 			</div>
 		</div>
-		
-		<div class="event-modal-extra" ng-show="{{theEvent['Additional Information']}}">
+
+		<div class="event-modal-extra" ng-show="theEvent['Additional Information']">
 			<h2 class="details-left">Details</h2>
 			<div class="event-data-modal-extra">{{theEvent['Additional Information']}}</div>
 		</div>
