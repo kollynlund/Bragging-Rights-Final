@@ -25,11 +25,6 @@
 				<iframe ng-if="!theEvent.Video" class="embed-responsive-item event-video" src="templates/videoError.html" allowfullscreen></iframe>
 			</div>
 		</div>
-
-		<div class="event-modal-extra" ng-show="theEvent['Additional Information']">
-			<h2 class="details-left">Details</h2>
-			<div class="event-data-modal-extra">{{theEvent['Additional Information']}}</div>
-		</div>
 	</div>
 	<div class="col-sm-3 display-event-info-modal-col-left">
 		<div class="border">
@@ -51,5 +46,11 @@
 			</div>
 		</div>
 		</div>
+		<div class="col-sm-12">
+			<div class="event-modal-extra" ng-show="theEvent['Additional Information']">
+				<h2 class="details-left">Details</h2>
+				<div class="event-data-modal-extra">{{theEvent['Additional Information']}}</div>
+			</div>
+  	</div>
 	</div>
 </div>
